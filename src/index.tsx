@@ -6,6 +6,7 @@ import "./styles/custom.scss";
 import "./index.css";
 import "./fonts/line-awesome-1.3.0/css/line-awesome.css";
 import "rc-slider/assets/index.css";
+import "react-tooltip/dist/react-tooltip.css";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

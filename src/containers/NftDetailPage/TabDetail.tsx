@@ -3,6 +3,8 @@ import { Tab } from "@headlessui/react";
 // import { personNames } from "contains/fakeData";
 import Avatar from "shared/Avatar/Avatar";
 import VerifyIcon from "components/VerifyIcon";
+import CopyButton from "components/CopyButton/CopyButton";
+import { getMidAddress } from "app/methods";
 import { useNavigate } from "react-router-dom";
 import { config } from "app/config";
 import { getItemPriceUnitText } from "./ItemPriceUnitText";
@@ -16,7 +18,7 @@ const TabDetail = (props: any) => {
   const [bids, setBids] = useState([]);
   const navigate = useNavigate();
 
-  const TABS = ["Bid History", "Provenance", "Owner"];
+  const TABS = ["History", "Provenance", "Details" /*, "Owner"*/];
 
   useEffect(() => {
     setConsideringNFT(props?.nft);
@@ -32,9 +34,8 @@ const TabDetail = (props: any) => {
           (bids as any).map((item: any, index: number) => (
             <li
               key={index}
-              className={`relative py-4 ${
-                index % 2 === 1 ? "bg-neutradl-100" : ""
-              }`}
+              className={`relative py-4 ${index % 2 === 1 ? "bg-neutradl-100" : ""
+                }`}
             >
               <div
                 className="flex items-center"
@@ -77,9 +78,8 @@ const TabDetail = (props: any) => {
           (ownHistory as any).map((item: any, index: number) => (
             <li
               key={index}
-              className={`relative py-4 ${
-                index % 2 === 1 ? "bg-neutradl-100" : ""
-              }`}
+              className={`relative py-4 ${index % 2 === 1 ? "bg-neutradl-100" : ""
+                }`}
             >
               <div
                 className="flex items-center"
@@ -115,6 +115,34 @@ const TabDetail = (props: any) => {
     );
   };
 
+  const renderTabDetails = () => {
+    return (
+      <div
+        className="flex flex-col py-4"
+      >
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">Stock Amount</span>
+        <span className="text-base text-neutral-900 dark:text-neutral-100 line-clamp-1">
+          {props?.stockAmount}
+        </span>
+
+        <br />
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">Contract Address</span>
+        <div className="flex items-center">
+          <span className="w-full text-base text-neutral-900 dark:text-neutral-100">
+            {getMidAddress(props?.contractAddress)}
+          </span>
+          <CopyButton data={props?.contractAddress} />
+        </div>
+
+        <br />
+        <span className="text-sm text-neutral-500 dark:text-neutral-400">Token ID</span>
+        <span className="text-base text-neutral-900 dark:text-neutral-100">
+          {props?.tokenId}
+        </span>
+      </div>
+    );
+  };
+
   const renderTabOwner = () => {
     return (
       <div
@@ -128,9 +156,8 @@ const TabDetail = (props: any) => {
           radius="rounded-full"
           imgUrl={
             (consideringNFT as any)?.owner?.avatar
-              ? `${config.API_URL}uploads/${
-                  (consideringNFT as any).owner.avatar
-                }`
+              ? `${config.API_URL}uploads/${(consideringNFT as any).owner.avatar
+              }`
               : ""
           }
         />
@@ -147,14 +174,17 @@ const TabDetail = (props: any) => {
 
   const renderTabItem = (item: string) => {
     switch (item) {
-      case "Bid History":
+      case "History":
         return renderTabBidHistory();
 
       case "Provenance":
         return renderTabProvenance();
 
-      case "Owner":
-        return renderTabOwner();
+      case "Details":
+        return renderTabDetails();
+
+      // case "Owner":
+      //   return renderTabOwner();
 
       default:
         return null;
@@ -169,10 +199,9 @@ const TabDetail = (props: any) => {
             <Tab
               key={tab}
               className={({ selected }) =>
-                `px-3.5 sm:px-8 py-1.5 sm:py-2 text-xs sm:text-sm leading-5 font-medium rounded-full focus:outline-none focus:ring-2 ring-primary-300 ${
-                  selected
-                    ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
-                    : "text-neutral-700 dark:text-neutral-300 bg-neutral-100/70 dark:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
+                `px-3.5 sm:px-8 py-1.5 sm:py-2 text-xs sm:text-sm leading-5 font-medium rounded-full focus:outline-none focus:ring-2 ring-primary-300 ${selected
+                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                  : "text-neutral-700 dark:text-neutral-300 bg-neutral-100/70 dark:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
                 }`
               }
             >
@@ -185,7 +214,7 @@ const TabDetail = (props: any) => {
             <Tab.Panel
               key={idx}
               className={
-                "rounded-xl focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60 "
+                "rounded-xl"
               }
             >
               {renderTabItem(tab)}

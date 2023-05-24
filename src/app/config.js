@@ -290,6 +290,36 @@ export const EVM_TESTNETS_LIST = {
   },
 };
 
+export const RIZE_MEMBER_NFTS = {
+  LAYER1: [
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+    "QmdW9EEZKwQho3PJ1yXarhFC4J2jeDwhC84tjJdh62Vfav",
+    "QmdfGsxc7zaiZ6pJFz37d9uB2V3k1P73euKLRr9YHRxvFb",
+    "QmW49RS77UR52gKAkk5k9dFyPBR5dLGV5P9dn79s7GmFzs",
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+  ],
+  LAYER2: [
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+    "QmdW9EEZKwQho3PJ1yXarhFC4J2jeDwhC84tjJdh62Vfav",
+    "QmdfGsxc7zaiZ6pJFz37d9uB2V3k1P73euKLRr9YHRxvFb",
+    "QmW49RS77UR52gKAkk5k9dFyPBR5dLGV5P9dn79s7GmFzs",
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+  ],
+  LAYER3: [
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+    "QmdW9EEZKwQho3PJ1yXarhFC4J2jeDwhC84tjJdh62Vfav",
+    "QmdfGsxc7zaiZ6pJFz37d9uB2V3k1P73euKLRr9YHRxvFb",
+    "QmW49RS77UR52gKAkk5k9dFyPBR5dLGV5P9dn79s7GmFzs",
+    "QmSyruFkgTnaRGx47sTTN7yh7eiu5TZCB5TJg7kUAxDXAE",
+    "QmcZo6uh32NxnTFuVzLwchWyVUo2z9aziDPYNEetj1dwR9",
+  ]
+}
+
 export const IS_TEST = false;
 export const ACTIVE_CHAINS =
   IS_TEST === true ? EVM_TESTNETS_LIST : EVM_MAINNETS_LIST;

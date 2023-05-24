@@ -9,7 +9,7 @@ import SectionSliderCollections2 from "components/SectionSliderCollections2";
 import SectionSliderCategories from "components/SectionSliderCategories/SectionSliderCategories";
 import SectionLargeSlider from "./SectionLargeSlider";
 import { Helmet } from "react-helmet";
-import frameImg from 'images/vector.svg';
+import frameImg from "images/vector.svg";
 
 function PageHome3() {
   return (
@@ -17,7 +17,6 @@ function PageHome3() {
       <Helmet>
         <title>Home || Rize2Day </title>
       </Helmet>
-
 
       <div className="nc-PageHome3 relative overflow-x-clip">
         <div className="relative">
@@ -33,7 +32,11 @@ function PageHome3() {
           </div>
 
           <div className="relative">
-            <div className={clsx("absolute bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full bottom-0 -right-[120px]")}></div>
+            <div
+              className={clsx(
+                "absolute bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full bottom-0 -right-[120px]"
+              )}
+            ></div>
             <div className="container py-10 px-3">
               <BackgroundSection />
               <SectionLargeSlider />
@@ -41,8 +44,16 @@ function PageHome3() {
           </div>
 
           <div className="relative">
-            <div className={clsx("absolute bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full -top-[100px] -left-[120px] z-0")}></div>
-            <img className="absolute w-full right-0 bottom-0 opacity-5" src={frameImg} alt="" />
+            <div
+              className={clsx(
+                "absolute bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full -top-[100px] -left-[120px] z-0"
+              )}
+            ></div>
+            <img
+              className="absolute w-full right-0 bottom-0 opacity-5"
+              src={frameImg}
+              alt=""
+            />
 
             <div className="container">
               <SectionGridAuthorBox

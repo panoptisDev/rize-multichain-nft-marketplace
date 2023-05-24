@@ -746,18 +746,6 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
         return;
       }
       const json = jsonFile.attributes;
-      if (schema.length !== json.length) {
-        toast.error(
-          <div>
-            <p className="mb-0">JSON Validation is failed.</p>
-            <p className="mb-0">
-              No matched in the attributes length in{" "}
-              <span className="text-red-400">{jsonItems[i]}</span>
-            </p>
-          </div>
-        );
-        return;
-      }
       for (let j = 0; j < json.length; j++) {
         const json_attribute = json[j];
         if (!hasKey(json_attribute, "trait_type")) {
@@ -778,59 +766,6 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
               <p className="mb-0">JSON Validation is failed.</p>
               <p className="mb-0">
                 No value property in{" "}
-                <span className="text-red-400">{jsonItems[i]}</span>
-              </p>
-            </div>
-          );
-          return;
-        }
-      }
-      for (let k = 0; k < schema.length; k++) {
-        const schema_attribute = schema[k];
-        const json_attribute = json[k];
-        if (
-          metaData[k].required &&
-          schema_attribute.trait_type !== json_attribute.trait_type
-        ) {
-          toast.error(
-            <div>
-              <p className="mb-0">JSON Validation is failed.</p>
-              <p className="mb-0">
-                No matched "{schema_attribute.trait_type}" type in{" "}
-                <span className="text-red-400">{jsonItems[i]}</span>
-              </p>
-            </div>
-          );
-          return;
-        }
-        if (
-          metaData[k].required &&
-          metaData[k].type.text === "boolean" &&
-          typeof json_attribute.value !== "boolean"
-        ) {
-          toast.error(
-            <div>
-              <p className="mb-0">JSON Validation is failed.</p>
-              <p className="mb-0">
-                No value "{json_attribute.value}" in{" "}
-                <span className="text-red-400">{jsonItems[i]}</span>
-              </p>
-            </div>
-          );
-          return;
-        }
-        if (
-          metaData[k].required &&
-          (metaData[k].type.text === "string" ||
-            metaData[k].type.text === "number") &&
-          !metaData[k].property.includes(json_attribute.value)
-        ) {
-          toast.error(
-            <div>
-              <p className="mb-0">JSON Validation is failed.</p>
-              <p className="mb-0">
-                No value "{json_attribute.value}" in [
-                {metaData[k]?.property?.join(", ")}] in{" "}
                 <span className="text-red-400">{jsonItems[i]}</span>
               </p>
             </div>
@@ -1266,80 +1201,52 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
                       </div>
                     ))}
                 </div>
-                {schemaData?.attributes?.length > 0 && (
-                  <>
-                    <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">
-                      When you create the JSON files, please add the correct
-                      fields and values, and keep the order.
-                      <br />
-                      Please refer to the sample JSON file.
-                    </div>
-                    {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mt-2">
-                      <Label className="w-full sm:col-span-1 md:col-span-2">Default Schema</Label>
-                      <Label className="w-full sm:col-span-1 md:col-span-2">File List</Label>
-                      <Label className="w-full md:col-span-1">&nbsp;</Label>
-                    </div> */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mt-3">
-                      <Textarea
-                        className="w-full min-h-[300px] max-h-[500px] sm:col-span-1 md:col-span-2"
-                        value={JSON.stringify(schemaData, undefined, 4)}
-                        readOnly
-                      ></Textarea>
-                      <SchemaList
-                        className="w-full min-h-[300px] max-h-[500px] overflow-x-auto sm:col-span-1 md:col-span-2"
-                        nftItems={nftItems}
-                        jsonItems={jsonItems}
-                        setNftItems={setNftItems}
-                        setJsonItems={setJsonItems}
+                <div className="w-full border-b-2 border-neutral-100 dark:border-neutral-600"></div>
+                <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-4">
+                  When you create the JSON files, please add the correct fields
+                  and values.
+                </div>
+                <div className="w-full flex gap-2  mt-2">
+                  <label
+                    htmlFor="json-upload"
+                    className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0 "
+                  >
+                    <GoCloudUpload className="ml-2" color="black" size={20} />
+                    <span className="pl-2">Select json files</span>
+                    <input
+                      ref={fileInputRef}
+                      id="json-upload"
+                      name="json-upload"
+                      type="file"
+                      className="sr-only"
+                      accept=".json,.*"
+                      onChange={changeJsonFile}
+                      multiple
+                    />
+                  </label>
+                  {sel_JsonFiles && sel_JsonFiles.length > 0 && (
+                    <button
+                      className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
+                      onClick={handleValidate}
+                    >
+                      <GrValidate className="ml-2" color="black" size={20} />
+                      <span className="pl-2">Validate</span>
+                    </button>
+                  )}
+                  {sel_JsonFiles && sel_JsonFiles.length > 0 && (
+                    <button
+                      className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
+                      onClick={handleClear}
+                    >
+                      <AiOutlineDelete
+                        className="ml-2"
+                        color="black"
+                        size={21}
                       />
-                      <div className="w-full md:col-span-1 flex flex-col gap-2">
-                        <label
-                          htmlFor="json-upload"
-                          className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
-                        >
-                          <GoCloudUpload
-                            className="ml-2"
-                            color="black"
-                            size={20}
-                          />
-                          <span className="pl-2">Upload</span>
-                          <input
-                            ref={fileInputRef}
-                            id="json-upload"
-                            name="json-upload"
-                            type="file"
-                            className="sr-only"
-                            accept=".json,application/json"
-                            onChange={changeJsonFile}
-                            multiple
-                          />
-                        </label>
-                        <button
-                          className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
-                          onClick={handleValidate}
-                        >
-                          <GrValidate
-                            className="ml-2"
-                            color="black"
-                            size={20}
-                          />
-                          <span className="pl-2">Validate</span>
-                        </button>
-                        <button
-                          className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
-                          onClick={handleClear}
-                        >
-                          <AiOutlineDelete
-                            className="ml-2"
-                            color="black"
-                            size={21}
-                          />
-                          <span className="pl-2">Clear</span>
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
+                      <span className="pl-2">Clear</span>
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="flex flex-col pt-2 space-x-0 space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 ">
                 <ButtonPrimary

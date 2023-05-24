@@ -10,6 +10,7 @@ import { selectCurrentNetworkSymbol } from "app/reducers/auth.reducers";
 import { isSupportedEVMNetwork } from "InteractWithSmartContract/interact";
 import platformContractAbi from "InteractWithSmartContract/RizeNFTFactory.json";
 import parse from "html-react-parser";
+import { Tooltip } from "react-tooltip";
 
 export default function AccordionInfo(props: any) {
   const currentNetworkSymbol = useAppSelector(selectCurrentNetworkSymbol);
@@ -22,6 +23,7 @@ export default function AccordionInfo(props: any) {
   const [imageSize, setImageSize] = useState("");
   const [itemNetworkSymbol, setItemNetworkSymbol] = useState(1);
   const [sizeOfMusicAndVideo, setSizeOfMusicAndVideo] = useState("");
+  const [metaData, setMetadata] = useState([]);
 
   const getTokenIdFromDBId = async (idOnDB: string) => {
     try {
@@ -55,6 +57,7 @@ export default function AccordionInfo(props: any) {
     setItemNetworkSymbol(props?.networkSymbol || PLATFORM_NETWORKS.COREUM);
     setTokenId(props?.tokenId || 0);
     setItemIdObDB(props?.id || "");
+    setMetadata(props?.attributes || []);
   }, [props]);
 
   useEffect(() => {
@@ -73,13 +76,12 @@ export default function AccordionInfo(props: any) {
             <Disclosure.Button className="flex justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-neutral-100 dark:bg-neutral-700 dark:hover:bg-neutral-500 hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-neutral-500 focus-visible:ring-opacity-75">
               <span>Descriptions</span>
               <ChevronUpIcon
-                className={`${
-                  open ? "transform rotate-180" : ""
-                } w-5 h-5 text-neutral-500`}
+                className={`${open ? "transform rotate-180" : ""
+                  } w-5 h-5 text-neutral-500`}
               />
             </Disclosure.Button>
             <Disclosure.Panel
-              className="px-4 pt-4 pb-2 text-sm text-neutral-500 dark:text-neutral-400"
+              className="px-4 pt-4 pb-2 text-sm text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap text-description"
               as="p"
             >
               {parse(description || "")}
@@ -87,7 +89,7 @@ export default function AccordionInfo(props: any) {
           </>
         )}
       </Disclosure>
-      <Disclosure defaultOpen as="div" className="mt-5 md:mt-8">
+      {/* <Disclosure defaultOpen as="div" className="mt-5 md:mt-8">
         {({ open }) => (
           <>
             <Disclosure.Button className="flex justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-neutral-100 dark:bg-neutral-700 dark:hover:bg-neutral-500 hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-neutral-500 focus-visible:ring-opacity-75">
@@ -99,7 +101,6 @@ export default function AccordionInfo(props: any) {
               />
             </Disclosure.Button>
             <Disclosure.Panel className="flex flex-col px-4 pt-4 pb-2 overflow-hidden text-xs text-neutral-500 dark:text-neutral-400">
-              {/* <span>{imagePixel}.IMAGE(685KB)</span> */}
               <br />
               <span>Stock Amount</span>
               <span className="text-base text-neutral-900 dark:text-neutral-100 line-clamp-1">
@@ -123,7 +124,47 @@ export default function AccordionInfo(props: any) {
             </Disclosure.Panel>
           </>
         )}
+      </Disclosure> */}
+      <Disclosure defaultOpen as="div" className="mt-5 md:mt-8">
+        {({ open }) => (
+          <>
+            <Disclosure.Button className="flex justify-between w-full px-4 py-2 font-medium text-left rounded-lg bg-neutral-100 dark:bg-neutral-700 dark:hover:bg-neutral-500 hover:bg-neutral-200 focus:outline-none focus-visible:ring focus-visible:ring-neutral-500 focus-visible:ring-opacity-75">
+              <span>Properties</span>
+              <ChevronUpIcon
+                className={`${open ? "transform rotate-180" : ""
+                  } w-5 h-5 text-neutral-500`}
+              />
+            </Disclosure.Button>
+            <Disclosure.Panel
+              className="px-4 pt-4 pb-2 text-sm text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap text-description"
+              as="p"
+            >
+              <div className="grid grid-cols-4 gap-2 ">
+                {metaData &&
+                  metaData.length > 0 &&
+                  metaData.map((item, index) => (
+                    <div
+                      className="border-[2px] border-gray-900 min-h-[100px] rounded-lg dark:bg-gray-700 flex flex-col items-center justify-evenly p-2"
+                      key={index}
+                    >
+                      <span className="text-[#33ff00] text-center">
+                        {item?.key || ""}
+                      </span>
+                      <span
+                        className="dark:text-white text-black w-full truncate text-center"
+                        data-tooltip-id="my-tooltip"
+                        data-tooltip-content={item?.value || ""}
+                      >
+                        {item?.value || ""}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </Disclosure.Panel>
+          </>
+        )}
       </Disclosure>
+      <Tooltip id="my-tooltip" />
     </div>
   );
 }

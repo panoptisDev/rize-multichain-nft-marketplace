@@ -101,8 +101,6 @@ const SectionLargeSlider: FC<SectionLargeSliderProps> = ({
     getNftBannerList(100);
   }, []);
 
-  console.log(items);
-
   return (
     <div className={`nc-SectionLargeSlider relative ${className} z-[999]`}>
       <div className="mb-12 lg:mb-14">

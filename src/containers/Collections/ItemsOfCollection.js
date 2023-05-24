@@ -29,6 +29,7 @@ import { getItemPriceUnitText } from "containers/NftDetailPage/ItemPriceUnitText
 import VideoForBannerPreview from "components/VideoForBannerPreview";
 import { nanoid } from "@reduxjs/toolkit";
 import parse from "html-react-parser";
+import CopyButton from "components/CopyButton/CopyButton";
 
 const SlickArrow = ({ currentSlide, slideCount, children, ...props }) => (
   <button {...props}>{children}</button>
@@ -123,7 +124,7 @@ const ItemsOfCollection = () => {
         setMetaList(list);
         dispatch(changeDetailedCollection(data));
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [collectionId]);
 
   useEffect(() => {
@@ -170,7 +171,7 @@ const ItemsOfCollection = () => {
         // setStart(last);
         // setLast(last + 8);
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => {
@@ -224,15 +225,34 @@ const ItemsOfCollection = () => {
     setRefresh(!refresh);
   };
 
+  const cutAddress = (address) => {
+    if (!address) return "";
+    else if (address.toString().length > 30) {
+      return address.toString().substring(0, 20) + "...";
+    } else {
+      return address;
+    }
+  };
+
+  const getMidAddress = (address) => {
+    if (isEmpty(address)) return "";
+    return (
+      address.slice(0, 10) +
+      "..." +
+      address.slice(address.length - 10, address.length)
+    );
+  };
+
   return (
     <>
       <Helmet>
-        <title>Detailt Collection || Rize2Day </title>
+        <title>Details Collection || Rize2Day </title>
       </Helmet>
       <div
         style={{
           width: "100%",
           marginLeft: "0",
+          marginRight: "0",
           marginBottom: "2rem",
         }}
       >
@@ -296,6 +316,16 @@ const ItemsOfCollection = () => {
         >
           {collection && collection.name}
         </div>
+        {collection?.address && collection.address !== "" && (
+          <div
+            style={{ marginTop: "1rem", textAlign: "center" }}
+          >
+            <span className="w-full text-base text-neutral-900 dark:text-neutral-100">
+              {getMidAddress(collection.address)}
+            </span>
+            <CopyButton data={collection.address} />
+          </div>
+        )}
         <div
           className={styles.createdBy}
           style={{ marginTop: "1rem", textAlign: "center" }}
@@ -319,8 +349,7 @@ const ItemsOfCollection = () => {
           {getItemPriceUnitText(collection)}
         </div>
         <div
-          className={styles.collectionDescription}
-          style={{ textAlign: "center", marginTop: "15px" }}
+          className={`${styles.collectionDescription} whitespace-pre-wrap text-center mt-[15px] text-description`}
         >
           {collection && parse(collection?.description || "")}
         </div>

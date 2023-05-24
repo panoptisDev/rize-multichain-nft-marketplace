@@ -420,10 +420,10 @@ const NftMoreDropdown: FC<NftMoreDropdownProps> = ({
       try {
         let checkBalance = await checkNativeCurrencyAndTokenBalances(0);
         if (checkBalance == false) return;
-        let txHash = burnNFT(
+        let txHash = await burnNFT(
           currentUsr.address,
           globalDetailNFT.collection_id.cw721address,
-          globalDetailNFT.tokenId
+          globalDetailNFT.tokenId.toString()
         );
         if (txHash == -1) {
           toast.error("Network error.");

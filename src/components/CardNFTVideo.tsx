@@ -11,6 +11,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import VideoForNft from "./VideoForNft";
 import { useAppSelector } from "app/hooks";
 import axios from "axios";
+import Tooltip from '@mui/material/Tooltip';
 import CardFlip from "react-card-flip";
 import { NFT_EFFECT } from "./EffectListBox";
 import TileEffect from "./TileEffect/TileEffect";
@@ -202,8 +203,8 @@ const CardNFTVideo = (props: any) => {
     return (
       <div
         className={`w-14 h-14 flex items-center justify-center rounded-full  cursor-pointer ${state === "playing"
-          ? "bg-neutral-900/40 text-primary-50"
-          : "bg-neutral-50/80 text-primary-500"
+            ? "bg-neutral-900/40 text-primary-50"
+            : "bg-neutral-50/80 text-primary-500"
           }`}
       >
         {renderIcon(state)}
@@ -311,20 +312,34 @@ const CardNFTVideo = (props: any) => {
       </div>
 
       <div className="p-4 py-5 space-y-3">
-        <div className="flex justify-between">
-          <h2
-            className={`text-lg font-medium`}
+        <div className="flex justify-between w-full">
+          <Tooltip
+            title={((nftItem as any)?.name || "").toString()}
+            placement="top"
+            arrow={true}
+          >
+            <div
+              className={`text-md cursor-pointer w-2/3`}
+              onClick={() => {
+                (nftItem as any)?._id
+                  ? navigate(`/nft-detail/${(nftItem as any)?._id}`)
+                  : navigate("/nft-detail");
+              }}
+            >
+              {((nftItem as any)?.name || "").toString().length > 10
+                ? ((nftItem as any)?.name || "").toString().substring(0, 10) +
+                "..."
+                : ((nftItem as any)?.name || "").toString()}
+            </div>
+          </Tooltip>
+          <div
+            className={`w-1/3 cursor-pointer`}
             onClick={() => {
               (nftItem as any)?._id
                 ? navigate(`/nft-detail/${(nftItem as any)?._id}`)
                 : navigate("/nft-detail");
             }}
-          >
-            {((nftItem as any)?.name || "").toString().length > 15
-              ? ((nftItem as any)?.name || "").toString().substring(0, 15) +
-              "..."
-              : ((nftItem as any)?.name || "").toString()}
-          </h2>
+          ></div>
           <div className="flex justify-between gap-2">
             <div>
               {!isEmpty((nftItem as any).owner) && (

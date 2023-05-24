@@ -5,6 +5,10 @@ import twitter from "images/socials/twitter.svg";
 import telegram from "images/socials/telegram.svg";
 import youtube from "images/socials/youtube.svg";
 
+import { FiFacebook, FiYoutube } from 'react-icons/fi';
+import { TbBrandTelegram, TbBrandTwitter } from 'react-icons/tb';
+import { RxDiscordLogo } from 'react-icons/rx';
+
 export interface SocialsListProps {
   className?: string;
   itemClass?: string;
@@ -12,10 +16,10 @@ export interface SocialsListProps {
 }
 
 const socialsDemo: SocialType[] = [
-  { name: "Facebook", icon: facebook, href: "#" },
-  { name: "Twitter", icon: twitter, href: "#" },
-  { name: "Youtube", icon: youtube, href: "#" },
-  { name: "Telegram", icon: telegram, href: "#" },
+  { name: "Facebook", icon: <FiFacebook color={'#33FF00'} />, href: "#" },
+  { name: "Twitter", icon: <TbBrandTwitter color={'#33FF00'} />, href: "#" },
+  { name: "Youtube", icon: <FiYoutube color={'#33FF00'} />, href: "#" },
+  { name: "Telegram", icon: <TbBrandTelegram color={'#33FF00'} />, href: "#" },
 ];
 
 const SocialsList: FC<SocialsListProps> = ({
@@ -37,7 +41,8 @@ const SocialsList: FC<SocialsListProps> = ({
           rel="noopener noreferrer"
           title={item.name}
         >
-          <img src={item.icon} alt="" />
+          {/* <img src={item.icon} alt="" /> */}
+          {item.icon}
         </a>
       ))}
     </nav>

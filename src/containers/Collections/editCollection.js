@@ -37,9 +37,15 @@ import { Helmet } from "react-helmet";
 import { useSigningClient } from "app/cosmwasm";
 import VideoForBannerPreview from "components/VideoForBannerPreview";
 import { nanoid } from "@reduxjs/toolkit";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  EditorState,
+  convertFromHTML,
+  convertToRaw,
+  ContentState,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
+import parse from "html-react-parser";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const ColorModeContext = React.createContext({ CollectionSelect: () => {} });
@@ -93,7 +99,6 @@ const EditCollection = () => {
         setLogoImg(collection.logoURL);
         setBannerImg(collection.bannerURL);
         setTextName(collection.name);
-        setTextDescription(collection.description);
         setCategories(
           categoriesOptions.find(
             (category) => category.value === collection.category
@@ -101,6 +106,19 @@ const EditCollection = () => {
         );
         setFloorPrice(collection.price);
         setMetaFields(collection.metaData);
+        console.log(
+          "collection.description ===> ",
+          JSON.stringify(collection.description)
+        );
+        // setEditorState(
+        //   EditorState.createWithContent(
+        //     ContentState.createFromText(collection.description || "")
+        //   )
+        // );
+
+        const contentBlocks = convertFromHTML("<p>Hello world</p>");
+        const contentState = ContentState.createFromBlockArray(contentBlocks);
+        setEditorState(EditorState.createWithContent(contentState));
       })
       .catch((error) => {
         console.log(error);

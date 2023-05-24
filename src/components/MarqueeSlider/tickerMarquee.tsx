@@ -2,6 +2,7 @@ import React from "react";
 import Marquee from "react-easy-marquee";
 import { config } from "app/config";
 import VideoForPreview from "components/VideoForPreview";
+import { useNavigate } from "react-router-dom";
 
 interface HighlightPropArg {
   items: any;
@@ -20,6 +21,7 @@ const Highlight: React.FC<HighlightPropArg> = ({
   width = 300,
   spaceBetween = 500,
 }) => {
+  const navigate = useNavigate();
   return (
     <div className="highlight-section w-full">
       <Marquee
@@ -38,7 +40,9 @@ const Highlight: React.FC<HighlightPropArg> = ({
               aspectRatio: "1",
               marginLeft: `${spaceBetween}px`,
               marginRight: `${spaceBetween}px`,
+              cursor: "pointer"
             }}
+            onClick={() => navigate('collectionItems/' + item.collection_id._id)}
           >
             {item && item.logoURL ? (
               <>

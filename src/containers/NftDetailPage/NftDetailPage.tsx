@@ -173,7 +173,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
         let itemData = result.data.data;
         dispatch(changeItemDetail(itemData || {}));
       })
-      .catch(() => {});
+      .catch(() => { });
 
     await axios
       .post(
@@ -188,7 +188,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
       .then((result) => {
         dispatch(changeItemOwnHistory(result.data.data || []));
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const plusPlayCount = async () => {
@@ -208,7 +208,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
       .then((result) => {
         dispatch(changeItemOwnHistory(result.data.data || []));
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   const setFavItem = async (target_id: string, user_id: string) => {
@@ -239,7 +239,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
             checkIsLiked();
             setRefresh(!refresh);
           })
-          .catch(() => {});
+          .catch(() => { });
       });
   };
 
@@ -284,10 +284,9 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
       (globalDetailNFT?.networkSymbol || PLATFORM_NETWORKS.COREUM)
     ) {
       toast.warn(
-        `Please connect your wallet to ${
-          ACTIVE_CHAINS[
-            globalDetailNFT?.networkSymbol || PLATFORM_NETWORKS.COREUM
-          ]?.name || ""
+        `Please connect your wallet to ${ACTIVE_CHAINS[
+          globalDetailNFT?.networkSymbol || PLATFORM_NETWORKS.COREUM
+        ]?.name || ""
         } and try again.`
       );
       return false;
@@ -327,7 +326,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
         parseFloat(balances[config.COIN_MINIMAL_DENOM]) <= 0 ||
         (parseFloat(tokenAmountShouldPay) > 0 &&
           parseFloat(balances[config.COIN_MINIMAL_DENOM]) <=
-            parseFloat(convertDenomToMicroDenom(tokenAmountShouldPay)))
+          parseFloat(convertDenomToMicroDenom(tokenAmountShouldPay)))
       ) {
         toast.warn("Insufficient CORE");
         return false;
@@ -494,7 +493,7 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
       if ((result as any).success === true) {
         toast.success(
           (result as any).message +
-            "Check your new item in your profile 'Collectibles' ."
+          "Check your new item in your profile 'Collectibles' ."
         );
         navigate("/page-author/" + currentUsr?._id);
       } else toast.error((result as any).message);
@@ -649,11 +648,11 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
           !instant ? "Auction" : "Fixed",
           !instant
             ? {
-                Time: [
-                  Math.floor(Date.now() / 1000),
-                  Math.floor(Date.now() / 1000) + Math.floor(aucperiod),
-                ],
-              }
+              Time: [
+                Math.floor(Date.now() / 1000),
+                Math.floor(Date.now() / 1000) + Math.floor(aucperiod),
+              ],
+            }
             : "Fixed",
           price,
           price,
@@ -854,7 +853,31 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
             {globalDetailNFT?.name || ""}
           </h2>
 
-          <div className="flex flex-col space-y-4 text-sm sm:flex-row sm:items-center sm:space-y-0 sm:space-x-8">
+          <div className="flex flex-col gap-4 text-sm sm:flex-row sm:items-center sm:gap-2" style={{ flexWrap: 'wrap' }}>
+            <div
+              className="flex items-center cursor-pointer "
+              onClick={() =>
+                navigate(`/page-author/${globalDetailNFT?.owner?._id || ""}`)
+              }
+            >
+              <Avatar
+                imgUrl={
+                  globalDetailNFT?.owner?.avatar
+                    ? `${config.API_URL}uploads/${globalDetailNFT.owner.avatar}`
+                    : undefined
+                }
+                sizeClass="h-9 w-9"
+                radius="rounded-full"
+              />
+              <span className="ml-2.5 text-neutral-500 dark:text-neutral-400 flex flex-col">
+                <span className="text-sm">Owner</span>
+                <span className="flex items-center font-medium text-neutral-900 dark:text-neutral-200">
+                  <span>{globalDetailNFT?.owner?.username || ""}</span>
+                  <VerifyIcon iconClass="w-4 h-4" />
+                </span>
+              </span>
+            </div>
+            <div className="hidden h-6 border-l sm:block border-neutral-200 dark:border-neutral-600"></div>
             <div
               className="flex items-center cursor-pointer "
               onClick={() =>
@@ -883,16 +906,14 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
               className="flex items-center"
               onClick={() =>
                 navigate(
-                  `/collectionItems/${
-                    globalDetailNFT?.collection_id?._id || ""
+                  `/collectionItems/${globalDetailNFT?.collection_id?._id || ""
                   }`
                 )
               }
             >
               <Avatar
-                imgUrl={`${config.API_URL}uploads/${
-                  globalDetailNFT?.collection_id?.logoURL || ""
-                }`}
+                imgUrl={`${config.API_URL}uploads/${globalDetailNFT?.collection_id?.logoURL || ""
+                  }`}
                 sizeClass="h-9 w-9"
                 radius="rounded-full"
               />
@@ -967,8 +988,8 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
                     ? "Current Bid"
                     : "Start price"
                   : globalDetailNFT?.isSale == 1
-                  ? "Sale Price"
-                  : "Price"}
+                    ? "Sale Price"
+                    : "Price"}
               </span>
               <PricesUnit
                 className="text-3xl font-semibold text-green-500 xl:text-4xl"
@@ -977,28 +998,26 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
               {globalDetailNFT.isSale > 0 && (
                 <span className="text-lg text-neutral-400 sm:ml-5">
                   {globalDetailNFT?.isSale == 2
-                    ? `( ≈ $ ${
-                        globalDetailNFT.bids && globalDetailNFT.bids.length > 0
+                    ? `( ≈ $ ${globalDetailNFT.bids && globalDetailNFT.bids.length > 0
+                      ? globalDetailNFT.bids[
+                        globalDetailNFT.bids.length - 1
+                      ].price
+                        ? (globalDetailNFT.networkSymbol ===
+                          PLATFORM_NETWORKS.COREUM
                           ? globalDetailNFT.bids[
-                              globalDetailNFT.bids.length - 1
-                            ].price
-                            ? (globalDetailNFT.networkSymbol ===
-                              PLATFORM_NETWORKS.COREUM
-                                ? globalDetailNFT.bids[
-                                    globalDetailNFT.bids.length - 1
-                                  ].price * globalCOREPrice
-                                : globalDetailNFT.bids[
-                                    globalDetailNFT.bids.length - 1
-                                  ].price * curUnitPrice
-                              )?.toFixed(2)
-                            : 0
-                          : (globalDetailNFT?.price * curUnitPrice)?.toFixed(
-                              2
-                            ) || 0
-                      } )`
-                    : `( ≈ $ ${
-                        (globalDetailNFT?.price * curUnitPrice)?.toFixed(2) || 0
-                      })`}
+                            globalDetailNFT.bids.length - 1
+                          ].price * globalCOREPrice
+                          : globalDetailNFT.bids[
+                            globalDetailNFT.bids.length - 1
+                          ].price * curUnitPrice
+                        )?.toFixed(2)
+                        : 0
+                      : (globalDetailNFT?.price * curUnitPrice)?.toFixed(
+                        2
+                      ) || 0
+                    } )`
+                    : `( ≈ $ ${(globalDetailNFT?.price * curUnitPrice)?.toFixed(2) || 0
+                    })`}
                 </span>
               )}
             </div>
@@ -1010,10 +1029,10 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
 
           <div className="flex flex-col mt-8 space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
             {globalDetailNFT &&
-            currentUsr &&
-            globalDetailNFT.isSale === 1 &&
-            globalDetailNFT.owner &&
-            globalDetailNFT.owner._id !== currentUsr._id ? (
+              currentUsr &&
+              globalDetailNFT.isSale === 1 &&
+              globalDetailNFT.owner &&
+              globalDetailNFT.owner._id !== currentUsr._id ? (
               <ButtonPrimary onClick={() => setVisibleModalPurchase(true)}>
                 Purchase now
               </ButtonPrimary>
@@ -1021,11 +1040,11 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
               <></>
             )}
             {globalDetailNFT &&
-            currentUsr &&
-            globalDetailNFT.isSale === 2 &&
-            globalDetailNFT.owner &&
-            globalDetailNFT.owner._id !== currentUsr._id &&
-            !auctionEnded ? (
+              currentUsr &&
+              globalDetailNFT.isSale === 2 &&
+              globalDetailNFT.owner &&
+              globalDetailNFT.owner._id !== currentUsr._id &&
+              !auctionEnded ? (
               <ButtonPrimary onClick={() => setVisibleModalBid(true)}>
                 Place a bid
               </ButtonPrimary>
@@ -1033,10 +1052,10 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
               <></>
             )}
             {globalDetailNFT &&
-            currentUsr &&
-            globalDetailNFT.isSale === 2 &&
-            globalDetailNFT.owner &&
-            globalDetailNFT.owner._id === currentUsr._id ? (
+              currentUsr &&
+              globalDetailNFT.isSale === 2 &&
+              globalDetailNFT.owner &&
+              globalDetailNFT.owner._id === currentUsr._id ? (
               globalDetailNFT.bids.length > 0 ? (
                 <ButtonPrimary onClick={() => setVisibleModalAccept(true)}>
                   Accept
@@ -1071,7 +1090,22 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
         </div>
 
         <div className="pt-9">
-          <TabDetail nft={globalDetailNFT} ownHistory={globalOwnHitoryOfNFT} />
+          <TabDetail
+            nft={globalDetailNFT}
+            ownHistory={globalOwnHitoryOfNFT}
+            contractAddress={
+              currentNetworkSymbol === PLATFORM_NETWORKS.COREUM
+                ? globalDetailNFT?.collection_id?.cw721address || ""
+                : isSupportedEVMNetwork(currentNetworkSymbol) === true
+                  ? ACTIVE_CHAINS[
+                    globalDetailNFT?.networkSymbol ||
+                    PLATFORM_NETWORKS.COREUM
+                  ]?.nftContractAddress || ""
+                  : ""
+            }
+            stockAmount={globalDetailNFT?.stockAmount || 1}
+            tokenId={globalDetailNFT?.tokenId || 0}
+          />
         </div>
       </div>
     );
@@ -1204,9 +1238,8 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
                   <VideoForPreview
                     src={
                       globalDetailNFT?.logoURL
-                        ? `${config.API_URL}uploads/${
-                            globalDetailNFT?.logoURL || ""
-                          }`
+                        ? `${config.API_URL}uploads/${globalDetailNFT?.logoURL || ""
+                        }`
                         : ""
                     }
                     nftId={globalDetailNFT?._id || DEMO_NFT_ID}
@@ -1283,16 +1316,17 @@ const NftDetailPage: FC<NftDetailPageProps> = ({
               </div>
 
               <AccordionInfo
+                attributes={globalDetailNFT?.metaData || []}
                 description={globalDetailNFT?.description || ""}
                 contractAddress={
                   currentNetworkSymbol === PLATFORM_NETWORKS.COREUM
                     ? globalDetailNFT?.collection_id?.cw721address || ""
                     : isSupportedEVMNetwork(currentNetworkSymbol) === true
-                    ? ACTIVE_CHAINS[
+                      ? ACTIVE_CHAINS[
                         globalDetailNFT?.networkSymbol ||
-                          PLATFORM_NETWORKS.COREUM
+                        PLATFORM_NETWORKS.COREUM
                       ]?.nftContractAddress || ""
-                    : ""
+                      : ""
                 }
                 id={globalDetailNFT?._id || ""}
                 logoURL={globalDetailNFT?.logoURL || ""}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker } from "emoji-mart";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import { format } from "timeago.js";
 import { ContentEditableEvent } from "react-contenteditable";
 import { Button, IconButton } from "@material-ui/core";
@@ -32,6 +33,7 @@ const MessageContainer = ({
   const [newMessage, setNewMessage] = useState("");
   const [down, setDown] = useState(0);
   const user = useAppSelector(selectCurrentUser);
+  const navigate = useNavigate();
   const roomRef = useRef(null);
   const socket = useRef(null);
   const chatRef = useRef<any>();
@@ -119,7 +121,7 @@ const MessageContainer = ({
         });
         const amigoData = response.data.data;
         setAmigo(amigoData);
-      } catch (err) {}
+      } catch (err) { }
     };
     if (currentchat) {
       getAmigodetails();
@@ -187,9 +189,8 @@ const MessageContainer = ({
         receiverId,
         chatroomId: currentchat?._id,
         username: user?.username,
-        avatar: `${
-          user?.avatar ? `${API_URL}uploads/${user.avatar}` : defaultAvatar
-        }`,
+        avatar: `${user?.avatar ? `${API_URL}uploads/${user.avatar}` : defaultAvatar
+          }`,
         text: textMessage,
       });
 
@@ -264,12 +265,12 @@ const MessageContainer = ({
               />
               <div className="chatroom-chatinfo-right">
                 <div className="chatroom-chatinfo-name">
-                  <a
-                    href={"/page-author/" + amigo?._id}
-                    className="chatroom-chatinfo-name"
+                  <span
+                    onClick={() => navigate(`/page-author/${amigo?._id}`)}
+                    className="chatroom-chatinfo-name cursor-pointer"
                   >
                     {amigo ? amigo?.username : ""}
-                  </a>
+                  </span>
                 </div>
                 <div className="chatroom-top-header">
                   <span>
@@ -352,12 +353,13 @@ const MessageContainer = ({
             <div className="chatroom-profile">
               <div className="flex flex-col gap-5">
                 <img
-                  className="profile-photo"
+                  className="profile-photo cursor-pointer"
                   src={
                     amigo?.avatar
                       ? `${API_URL}uploads/${amigo.avatar}`
                       : defaultAvatar
                   }
+                  onClick={() => navigate(`/page-author/${amigo?._id}`)}
                   alt=""
                 />
                 <div className={online ? "profile-online" : "profile-offline"}>

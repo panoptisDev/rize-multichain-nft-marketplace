@@ -15,6 +15,7 @@ import {
   selectCurrentNetworkSymbol,
   selectCurrentUser,
 } from "app/reducers/auth.reducers";
+import Tooltip from '@mui/material/Tooltip';
 import CardFlip from "react-card-flip";
 import { useAppSelector } from "app/hooks";
 import { isEmpty } from "app/methods";
@@ -242,20 +243,34 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
         </div>
 
         <div className="p-4 py-5 space-y-3">
-          <div className="flex justify-between">
-            <h2
-              className={`text-lg font-medium`}
+          <div className="flex justify-between w-full">
+            <Tooltip
+              title={((nftItem as any)?.name || "").toString()}
+              placement="top"
+              arrow={true}
+            >
+              <div
+                className={`w-2/3 text-md cursor-pointer `}
+                onClick={() => {
+                  (nftItem as any)?._id
+                    ? navigate(`/nft-detail/${(nftItem as any)?._id}`)
+                    : navigate("/nft-detail");
+                }}
+              >
+                {((nftItem as any)?.name || "").toString().length > 10
+                  ? ((nftItem as any)?.name || "").toString().substring(0, 10) +
+                  "..."
+                  : ((nftItem as any)?.name || "").toString()}
+              </div>
+            </Tooltip>
+            <div
+              className={`w-1/3 cursor-pointer`}
               onClick={() => {
                 (nftItem as any)?._id
                   ? navigate(`/nft-detail/${(nftItem as any)?._id}`)
                   : navigate("/nft-detail");
               }}
-            >
-              {((nftItem as any)?.name || "").toString().length > 15
-                ? ((nftItem as any)?.name || "").toString().substring(0, 15) +
-                "..."
-                : ((nftItem as any)?.name || "").toString()}
-            </h2>
+            ></div>
             <div className="flex justify-between gap-2">
               <div>
                 {!isEmpty((nftItem as any).owner) && (
@@ -285,7 +300,7 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                 networkSymbol={
                   (nftItem as any)?.networkSymbol || PLATFORM_NETWORKS.COREUM
                 }
-                className=""
+                className={`cursor-pointer`}
               />
             </div>
           </div>

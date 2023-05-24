@@ -223,9 +223,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
           wallet: walletAddress || "",
         })
         .then((response) => {
-          console.log("isM response.data ===> ", response.data);
           let isM = response.data.data || false;
-          console.log("isM ===> ", isM);
           dispatch(changeMemberOrNot(isM));
         });
     } catch (error) {
@@ -273,7 +271,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
       let connector_update = await walletconnect.activate();
 
       console.log("chain id:::::::::", connector_update.chainId);
-      if(RPC_URLs.keys.filter((item) => {if(item == connector_update.chainId) return true; else return false;}).length == 0) {
+      if (RPC_URLs.keys.filter((item) => { if (item == connector_update.chainId) return true; else return false; }).length == 0) {
         console.log("mismatch chain id:", connector_update.chainId);
         walletconnect.deactivate();
         localStorage.removeItem("walletconnect");
@@ -341,6 +339,12 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                     className="inset-0 py-1 px-4 dark:text-white text-neutral-900 text-sm transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700"
                   >
                     Marketplace
+                  </Link>
+                  <Link
+                    to={"/"}
+                    className="inset-0 py-1 px-4 dark:text-white text-neutral-900 text-sm transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                  >
+                    Launchpad
                   </Link>
                   <Link
                     to={"/"}

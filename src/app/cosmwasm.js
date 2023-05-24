@@ -221,7 +221,6 @@ export const SigningCosmWasmProvider = ({ children }) => {
 
   const fetchBalance = async () => {
     try {
-      console.log(" Fetch balance ", walletAddress);
       if (!walletAddress) return;
       const balanceList = {};
       const resp = await axios({
@@ -241,14 +240,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         });
         balanceList.cw20 = convertMicroDenomToDenom(resp2.balance);
       }
-      console.log(">>>> Balance <<<<", balanceList);
       setBalances(balanceList);
     } catch (error) {
       console.log("Blance error 2: ", error);
     }
   };
-
-  console.log(balances);
 
   const getTokenBalance = async (address) => {
     try {

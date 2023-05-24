@@ -1,37 +1,38 @@
 import { useState, useEffect } from 'react'
 import clsx from 'clsx';
-import MarqueeSlider from "components/MarqueeSlider/tickerMarquee";
+// import MarqueeSlider from "components/MarqueeSlider/tickerMarquee";
+import MarqueeSlider from "components/MarqueeSlider/videoMarquee";
 import axios from 'axios';
 import { useMediaQuery } from 'react-responsive';
-import { config } from 'app/config';
+import { RIZE_MEMBER_NFTS } from 'app/config';
 
 const Marquee3D = () => {
-  const [popularItems, setPopularItems] = useState([]);
+  // const [popularItems, setPopularItems] = useState([]);
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' })
   const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' })
 
-  const getPopularItems = () => {
-    axios.post(
-      `${config.API_URL}api/item/getPopularItems`,
-      {
-        limit: 10
-      }
-    ).then((response) => {
-      setPopularItems(response.data.data || []);
-    })
-      .catch((error) => {
-        console.log("getPopularItems() error ===> ", error);
-      })
-  }
+  // const getPopularItems = () => {
+  //   axios.post(
+  //     `${config.API_URL}api/item/getPopularItems`,
+  //     {
+  //       limit: 10
+  //     }
+  //   ).then((response) => {
+  //     setPopularItems(response.data.data || []);
+  //   })
+  //     .catch((error) => {
+  //       console.log("getPopularItems() error ===> ", error);
+  //     })
+  // }
 
-  useEffect(() => {
-    getPopularItems();
-  }, []);
+  // useEffect(() => {
+  //   getPopularItems();
+  // }, []);
 
   return (
     <div className="relative w-full h-[500px]">
-      <div className={"absolute top-0 bottom-0 flex items-center w-full"}>
-        {popularItems.length > 0 && (
+      {/* <div className={"absolute top-0 bottom-0 flex items-center w-full"}>
+        {(
           <MarqueeSlider items={popularItems} speed={4 * 10 ** 5} delay={4} width={isBigScreen ? 300 : isDesktopOrLaptop ? 200 : 200} />
         )}
       </div>
@@ -45,6 +46,15 @@ const Marquee3D = () => {
         {popularItems.length > 0 && (
           <MarqueeSlider items={popularItems} speed={1 * 10 ** 5} delay={0} width={isBigScreen ? 500 : isDesktopOrLaptop ? 400 : 300} />
         )}
+      </div> */}
+      <div className={"absolute top-0 bottom-0 flex items-center w-full"}>
+        <MarqueeSlider items={RIZE_MEMBER_NFTS.LAYER1} speed={4 * 10 ** 5} delay={4} width={isBigScreen ? 300 : isDesktopOrLaptop ? 200 : 200} />
+      </div>
+      <div className={"absolute top-0 bottom-0 flex items-center w-full"}>
+        <MarqueeSlider items={RIZE_MEMBER_NFTS.LAYER2} speed={2 * 10 ** 5} delay={2} width={isBigScreen ? 400 : isDesktopOrLaptop ? 300 : 250} />
+      </div>
+      <div className={"absolute top-0 bottom-0 flex items-center w-full"}>
+        <MarqueeSlider items={RIZE_MEMBER_NFTS.LAYER3} speed={1 * 10 ** 5} delay={0} width={isBigScreen ? 500 : isDesktopOrLaptop ? 400 : 300} />
       </div>
     </div>
   )

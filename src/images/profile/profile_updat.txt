@@ -1,0 +1,15 @@
+1 can change color of background
+2 can add music to background
+3 can add music to collections
+4 can add a special views to certain and/or certain collections
+5 can add custom text and text boxes anywhere on screen
+6 screen will act like its own webpage.... yet it will be tied directly to nft marketplace
+7 we have a blog section also... maybe the user wants to mint thier blog article... and showcase it
+8 later they may want to add a nft next to it
+9 nfts should be able to be scalable in size as big or as smaill as they like as long as if doesnt distort their image to much
+10 there should be some premade text and themes and shapes like canva
+11 placement of any object/text/nft is necessary
+12 nft information can be dispalyed on back of nft so when they click it turns over or they can press a button and have info in a custom card that is place somewhere around/next to nft
+13 custom font sizes and fonts
+14 again a profile page that is fully customizable like canva/website...
+15 their will have to be two views... the editable/owner view and the pubilc view.

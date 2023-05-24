@@ -1,6 +1,6 @@
 import Label from "components/Label/Label";
 import styles from "../containers/Collections/UploadDetails.module.sass";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import Input from "shared/Input/Input";
 import Textarea from "shared/Textarea/Textarea";
@@ -28,7 +28,7 @@ import {
   selectWalletStatus,
 } from "app/reducers/auth.reducers";
 import { Navigate, useNavigate } from "react-router-dom";
-import { isEmpty } from "app/methods";
+import { hasKey, isEmpty } from "app/methods";
 import { config, COREUM_PAYMENT_COINS, PLATFORM_NETWORKS } from "app/config.js";
 import {
   changeTradingResult,
@@ -56,6 +56,9 @@ import { EditorState, convertToRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import TextInput from "components/TextInput";
+import { GoCloudUpload } from "react-icons/go";
+import { AiOutlineDelete } from "react-icons/ai";
 
 export interface PageUploadItemProps {
   className?: string;
@@ -113,6 +116,7 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
   const currentNetworkSymbol = useAppSelector(selectCurrentNetworkSymbol);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [sale, setSale] = useState(false);
@@ -794,6 +798,80 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
     };
   };
 
+  const changeJsonFile = async (event: any) => {
+    try {
+      console.log("event.target.files ===> ", event.target.files);
+      var file = event.target.files[0];
+      if (file == null) return;
+      const fileContent = await file.text();
+      console.log("filecontent ===> ", fileContent);
+      const jsonFileContent = JSON.parse(fileContent.toString());
+      console.log("jsonFileContent ===> ", jsonFileContent);
+
+      if (!hasKey(jsonFileContent, "attributes")) {
+        toast.error(
+          <div>
+            <p className="mb-0">JSON Validation is failed.</p>
+            <p className="mb-0">
+              No attributes property in{" "}
+              <span className="text-red-400">{jsonFileContent}</span>
+            </p>
+          </div>
+        );
+        return;
+      }
+      const json = jsonFileContent.attributes;
+      for (let j = 0; j < json.length; j++) {
+        const json_attribute = json[j];
+        if (!hasKey(json_attribute, "trait_type")) {
+          toast.error(
+            <div>
+              <p className="mb-0">JSON Validation is failed.</p>
+              <p className="mb-0">
+                No trait_type property in{" "}
+                <span className="text-red-400">{jsonFileContent}</span>
+              </p>
+            </div>
+          );
+          return;
+        }
+        if (!hasKey(json_attribute, "value")) {
+          toast.error(
+            <div>
+              <p className="mb-0">JSON Validation is failed.</p>
+              <p className="mb-0">
+                No value property in{" "}
+                <span className="text-red-400">{jsonFileContent}</span>
+              </p>
+            </div>
+          );
+          return;
+        }
+      }
+
+      const attributes = jsonFileContent.attributes;
+      setMetaData(attributes);
+      let metalist = [];
+      for (let j = 0; j < attributes.length; j++) {
+        const attribute = attributes[j];
+        const meta = {
+          key: attribute.trait_type,
+          disabled: false,
+          value: attribute.value,
+        };
+        metalist.push(meta);
+      }
+      console.log("metalist ===> ", metalist);
+      setMetaList(metalist);
+    } catch (error) {}
+  };
+
+  const handleClear = () => {
+    fileInputRef.current.value = "";
+    setMetaData([]);
+    setMetaList([]);
+  };
+
   return (
     <>
       <Helmet>
@@ -1128,56 +1206,62 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
                   </div>
                 </RadioGroup>
               </div>
-              {metaData && metaData.length > 0 && <p>Schema Properties</p>}
+
+              <div className="w-full border-b-2 border-neutral-100 dark:border-neutral-600"></div>
+              <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-2 py-0">
+                When you create the JSON files, please add the correct fields
+                and values.
+              </div>
+              <div className="w-full flex items-center mt-2">
+                <label
+                  htmlFor="json-upload"
+                  className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0"
+                >
+                  <GoCloudUpload className="ml-2" color="black" size={20} />
+                  <span className="pl-2">Select a json file</span>
+                  <input
+                    ref={fileInputRef}
+                    id="json-upload"
+                    name="json-upload"
+                    type="file"
+                    className="sr-only"
+                    accept=".json,.*"
+                    onChange={changeJsonFile}
+                  />
+                </label>
+                {metaList && metaList.length > 0 && (
+                  <button
+                    className="nc-Button relative h-auto inline-flex justify-start items-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6  ttnc-ButtonPrimary disabled:bg-opacity-70 bg-green-400 hover:bg-green-500 text-primary-shadow text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-0 ml-2"
+                    onClick={handleClear}
+                  >
+                    <AiOutlineDelete className="ml-2" color="black" size={21} />
+                    <span className="pl-2">Clear</span>
+                  </button>
+                )}
+              </div>
+              {metaData && metaData.length > 0 && (
+                <p className="text-md text-[#5f5f5f]">Schema Properties</p>
+              )}
               {metaList?.length > 0 &&
                 metaList?.map((meta, index) => (
                   <div
                     className="grid grid-cols-3 items-start !mt-4"
                     key={index}
                   >
-                    {metaData[index].required ? (
-                      <div className="col-span-1 mt-4">{meta.key}</div>
-                    ) : (
-                      <div className="col-span-1 flex items-center">
-                        {meta.key}
-                        <Checkbox
-                          checked={!meta.disabled}
-                          onChange={(e) => handleCheckFieldChange(e, index)}
-                          inputProps={{ "aria-label": "controlled" }}
-                        />
-                      </div>
-                    )}
+                    <div className="col-span-1 flex items-center">
+                      {meta.key}
+                      <Checkbox
+                        checked={!meta.disabled}
+                        onChange={(e) => handleCheckFieldChange(e, index)}
+                        inputProps={{ "aria-label": "controlled" }}
+                      />
+                    </div>
                     <div className="col-span-2">
-                      {meta.type === "boolean" ? (
-                        <FormControlLabel
-                          label=""
-                          className="items-center"
-                          control={
-                            <Checkbox
-                              checked={meta.value}
-                              onChange={(e) => handleCheckChange(e, index)}
-                              disabled={meta.disabled}
-                            />
-                          }
-                        />
-                      ) : meta.type === "textarea" ? (
-                        <Textarea
-                          value={meta.value}
-                          disabled={meta.disabled}
-                          onChange={(e) => handleChangeText(e, index)}
-                        />
-                      ) : (
-                        <Dropdown
-                          className={styles.dropdown}
-                          value={{ value: meta.value, text: meta.value }}
-                          setValue={(v) => handleDropdown(v, index)}
-                          options={metaData[index].property.map((item) => ({
-                            value: item,
-                            text: item,
-                          }))}
-                          disabled={meta.disabled}
-                        />
-                      )}
+                      <Input
+                        value={meta.value}
+                        disabled={meta.disabled}
+                        onChange={(e) => handleChangeText(e, index)}
+                      />
                     </div>
                   </div>
                 ))}
