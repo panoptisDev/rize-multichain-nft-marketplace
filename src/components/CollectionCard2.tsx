@@ -120,7 +120,9 @@ const CollectionCard2: FC<CollectionCard2Props> = ({
                 {(data as any)?.creator_info.username || ""}
               </span>
             </div>
-            <VerifyIcon iconClass="w-4 h-4" />
+            {Boolean((data as any)?.creator_info.verified) === true && (
+              <VerifyIcon iconClass="w-4 h-4" />
+            )}
           </div>
           <span className="mb-0.5 ml-2 inline-flex justify-center items-center px-2 py-1.5 border-2 border-secondary-500 text-secondary-500 rounded-md text-xs !leading-none font-medium">
             {(data as any)?.collection_info.items?.length || 0} items

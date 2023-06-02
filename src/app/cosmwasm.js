@@ -16,7 +16,7 @@ import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 import { config, chainConfig, PLATFORM_NETWORKS } from "./config.js";
 import { isEmpty } from "app/methods";
 import { QueryClient } from "react-query";
-import { coins } from "@cosmjs/stargate";
+import { coins, isDeliverTxFailure } from "@cosmjs/stargate";
 import {
   convertDenomToMicroDenom,
   convertMicroDenomToDenom,
@@ -65,7 +65,6 @@ const unsafelyGetDefaultExecuteFee = () => {
 };
 
 const getWalletProvider = (wallet_type) => {
-
   let provider = null;
   switch (wallet_type) {
     case "keplr":
@@ -82,7 +81,7 @@ const getWalletProvider = (wallet_type) => {
   }
 
   return provider;
-}
+};
 
 async function getKeplr() {
   if (window.keplr) {
@@ -157,7 +156,8 @@ export const SigningCosmWasmProvider = ({ children }) => {
         case "cosmostation":
           window.open("https://cosmostation.io/", "_blank");
           break;
-        default: break;
+        default:
+          break;
       }
 
       return;
@@ -368,7 +368,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         undefined,
         []
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -389,7 +393,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         undefined,
         []
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -412,7 +420,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         { batch_mint: { uri: uris, owner: owners, extension } },
         defaultFee
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -432,7 +444,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         },
         defaultFee
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -451,7 +467,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         },
         defaultFee
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -503,7 +523,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       console.log(error);
       throw error;
@@ -535,7 +559,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       console.log(">>>>", error);
       throw error;
@@ -571,7 +599,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         undefined,
         [coin(convertDenomToMicroDenom(amount), config.COIN_MINIMAL_DENOM)]
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -618,7 +650,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -637,7 +673,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -657,7 +697,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }
@@ -678,7 +722,11 @@ export const SigningCosmWasmProvider = ({ children }) => {
         defaultFee,
         undefined
       );
-      return result.transactionHash;
+      if (isDeliverTxFailure(result)) {
+        return -1;
+      } else {
+        return result.transactionHash;
+      }
     } catch (error) {
       throw error;
     }

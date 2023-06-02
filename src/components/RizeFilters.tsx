@@ -4,7 +4,7 @@ import ButtonPrimary from "shared/Button/ButtonPrimary";
 import ButtonThird from "shared/Button/ButtonThird";
 import ButtonClose from "shared/ButtonClose/ButtonClose";
 import Checkbox from "shared/Checkbox/Checkbox";
-import { BiCategoryAlt } from 'react-icons/bi';
+import { BiCategoryAlt } from "react-icons/bi";
 import Slider from "rc-slider";
 import Radio from "shared/Radio/Radio";
 import { ChevronDownIcon } from "@heroicons/react/outline";
@@ -58,8 +58,8 @@ const fileTypes = [
 const sortOrderRadios = [
   { name: "Newest", id: "Newest" },
   { name: "Oldest", id: "Oldest" },
-  { name: "Price low - hight", id: "Price-low-hight" },
-  { name: "Price hight - low", id: "Price-hight-low" },
+  { name: "Price low - high", id: "Price-low-high" },
+  { name: "Price high - low", id: "Price-high-low" },
   { name: "Most favorited", id: "Most-favorited" },
   { name: "Least favorited", id: "Least-favorited" },
 ];
@@ -102,16 +102,19 @@ const RizeFilters = (props) => {
   };
 
   const handleChangeSaleType = (index: number) => {
-    setSaleTypeStates(index || 0);
-    if (props.onChangeStatus !== undefined) props.onChangeStatus(index || 0);
+    console.log("handleChangeSaleType ", index);
+    setSaleTypeStates(index);
+    if (props.onChangeStatus !== undefined) props.onChangeStatus(index);
   };
 
   const handleChangeCategory = (index: number) => {
-    setCategoryStates(index || 0);
-    if (props.onChangeCategory !== undefined) props.onChangeCategory(index || 0);
+    setCategoryStates(index);
+    if (props.onChangeCategory !== undefined) props.onChangeCategory(index);
   };
 
   useEffect(() => {
+    if (props.categoryValue !== undefined)
+      setCategoryStates(props.categoryValue);
     if (props.dateValue !== undefined) setSortOrderStates(props.dateValue);
     if (props.statusValue !== undefined) setSaleTypeStates(props.statusValue);
     if (props.fileTypeValue !== undefined)
@@ -147,18 +150,14 @@ const RizeFilters = (props) => {
     return (
       <div className="relative dropdown">
         <div className="pb-2">
-          <div className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}>
+          <div
+            className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}
+          >
             <BiCategoryAlt size={16} />
             <span className="ml-2">
               {(category[categoryStates] as any).text || ""}
             </span>
-            {/* {!saleTypeStates.length ? ( */}
             <ChevronDownIcon className="w-4 h-4 ml-3" />
-            {/* ) : (
-                <span onClick={() => handleChangeSaleType(0)}>
-                  {renderXClear()}
-                </span>
-              )} */}
           </div>
         </div>
         <div className="dropdown-content left-0 translate-x-0 px-4 sm:px-0">
@@ -172,8 +171,7 @@ const RizeFilters = (props) => {
                     label={item.text}
                     defaultChecked={categoryStates === index}
                     onChange={(checked) => {
-                      if (Boolean(checked) == true)
-                        handleChangeCategory(index);
+                      if (Boolean(checked) == true) handleChangeCategory(index);
                     }}
                   />
                 </div>
@@ -182,7 +180,6 @@ const RizeFilters = (props) => {
           </div>
         </div>
       </div>
-
     );
   };
 
@@ -191,7 +188,9 @@ const RizeFilters = (props) => {
     return (
       <div className="relative dropdown">
         <div className="pb-2">
-          <div className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}>
+          <div
+            className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}
+          >
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none">
               <path
                 d="M10 6.575L9.10838 8.125C8.90838 8.46666 9.07505 8.75 9.46672 8.75H10.525C10.925 8.75 11.0834 9.03333 10.8834 9.375L10 10.925"
@@ -218,13 +217,7 @@ const RizeFilters = (props) => {
             <span className="ml-2">
               {(typeOfSales[saleTypeStates] as any).name || ""}
             </span>
-            {/* {!saleTypeStates.length ? ( */}
             <ChevronDownIcon className="w-4 h-4 ml-3" />
-            {/* ) : (
-                <span onClick={() => handleChangeSaleType(0)}>
-                  {renderXClear()}
-                </span>
-              )} */}
           </div>
         </div>
         <div className="dropdown-content left-0 translate-x-0 px-4 sm:px-0">
@@ -238,8 +231,7 @@ const RizeFilters = (props) => {
                     label={item.name}
                     defaultChecked={saleTypeStates === index}
                     onChange={(checked) => {
-                      if (Boolean(checked) == true)
-                        handleChangeSaleType(index);
+                      if (Boolean(checked) == true) handleChangeSaleType(index);
                     }}
                   />
                 </div>
@@ -248,7 +240,6 @@ const RizeFilters = (props) => {
           </div>
         </div>
       </div>
-
     );
   };
 
@@ -257,7 +248,9 @@ const RizeFilters = (props) => {
     return (
       <div className="relative dropdown">
         <div className="pb-2">
-          <div className={`flex items-center justify-center px-3 py-1.5 text-xs border rounded-full focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}>
+          <div
+            className={`flex items-center justify-center px-3 py-1.5 text-xs border rounded-full focus:outline-none !border-primary-1000 bg-primary-1000 text-green-900`}
+          >
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none">
               <path
                 d="M11.5166 5.70834L14.0499 8.24168"
@@ -317,8 +310,7 @@ const RizeFilters = (props) => {
                   label={item.name}
                   defaultChecked={sortOrderStates === index}
                   onChange={(checked) => {
-                    if (Boolean(checked) == true)
-                      handleChangeOrderType(index);
+                    if (Boolean(checked) == true) handleChangeOrderType(index);
                   }}
                 />
               ))}
@@ -326,7 +318,7 @@ const RizeFilters = (props) => {
           </div>
         </div>
       </div>
-    )
+    );
   };
 
   // OK
@@ -334,7 +326,9 @@ const RizeFilters = (props) => {
     return (
       <div className="relative dropdown">
         <div className="pb-2">
-          <div className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none bg-primary-1000 text-green-900 border-primary-1000`}>
+          <div
+            className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border focus:outline-none bg-primary-1000 text-green-900 border-primary-1000`}
+          >
             <svg
               className="w-4 h-4"
               viewBox="0 0 24 24"
@@ -415,7 +409,9 @@ const RizeFilters = (props) => {
     return (
       <div className="relative dropdown">
         <div className="pb-2">
-          <div className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border border-primary-1000 bg-primary-1000 text-green-900 focus:outline-none `}>
+          <div
+            className={`flex items-center justify-center px-3 py-1.5 text-xs rounded-full border border-primary-1000 bg-primary-1000 text-green-900 focus:outline-none `}
+          >
             <svg
               className="w-4 h-4"
               viewBox="0 0 24 24"
@@ -529,10 +525,11 @@ const RizeFilters = (props) => {
   const renderTabVerifiedCreator = () => {
     return (
       <div
-        className={`flex items-center justify-center px-3 py-1.5 mb-2 text-xs rounded-full border focus:outline-none cursor-pointer  ${isVerifiedCreator
-          ? "border-primary-1000 bg-primary-1000 text-green-900"
-          : "border-neutral-300 dark:border-primary-1000 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
-          }`}
+        className={`flex items-center justify-center px-3 py-1.5 mb-2 text-xs rounded-full border focus:outline-none cursor-pointer  ${
+          isVerifiedCreator
+            ? "border-primary-1000 bg-primary-1000 text-green-900"
+            : "border-neutral-300 dark:border-primary-1000 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
+        }`}
         onClick={() => handleChangeVerifiedCreator(!isVerifiedCreator)}
       >
         <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none">

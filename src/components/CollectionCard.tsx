@@ -137,7 +137,9 @@ const CollectionCard: FC<CollectionCardProps> = ({
                 {collection?.owner?.username || ""}
               </span>
             </div>
-            <VerifyIcon iconClass="w-4 h-4" />
+            {Boolean(collection?.owner?.verified) === true && (
+              <VerifyIcon iconClass="w-4 h-4" />
+            )}
           </div>
         )}
         <h2

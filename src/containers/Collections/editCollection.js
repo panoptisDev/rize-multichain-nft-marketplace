@@ -70,6 +70,7 @@ const EditCollection = () => {
   const [working, setWorking] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const { balances } = useSigningClient();
+  const [blurItems, setBlurItems] = useState(false);
 
   const [mode, setMode] = React.useState("light");
   const colorMode = React.useContext(ColorModeContext);
@@ -110,13 +111,10 @@ const EditCollection = () => {
           "collection.description ===> ",
           JSON.stringify(collection.description)
         );
-        // setEditorState(
-        //   EditorState.createWithContent(
-        //     ContentState.createFromText(collection.description || "")
-        //   )
-        // );
 
-        const contentBlocks = convertFromHTML("<p>Hello world</p>");
+        const contentBlocks = convertFromHTML(
+          collection.description || "<p>Hello world</p>"
+        );
         const contentState = ContentState.createFromBlockArray(contentBlocks);
         setEditorState(EditorState.createWithContent(contentState));
       })
@@ -303,6 +301,7 @@ const EditCollection = () => {
     if (floorPrice !== oldData.price) {
       params.price = floorPrice;
     }
+    params.blurItems = blurItems;
     params.owner = currentUsr._id;
     params.metaData = metaFields;
     saveCollection(params);
@@ -496,7 +495,7 @@ const EditCollection = () => {
         <div className={styles.item}>
           <div className={styles1.stage}>Collection Details</div>
           <div className=" flex min-h-[250px] ">
-            <div className="flex flex-col min-h-full justify-between w-2/5">
+            <div className="flex flex-col min-h-full justify-evenly w-2/5">
               <FormItem label="Name *">
                 <Input
                   defaultValue="name"
@@ -508,18 +507,15 @@ const EditCollection = () => {
                   }}
                 />
               </FormItem>
-              <FormItem label="FLOOR PRICE">
-                <Input
-                  placeholder="Enter the floor price"
-                  value={floorPrice}
-                  type="number"
-                  min="0"
-                  step="0.001"
-                  onChange={(event) => {
-                    setFloorPrice(event.target.value);
+              <div className="flexl mt-5 ml-0 mb-5">
+                <Checkbox
+                  value={blurItems}
+                  onChange={(e, checked) => {
+                    setBlurItems(checked);
                   }}
                 />
-              </FormItem>
+                <Label>Blur items</Label>
+              </div>
               <FormItem label="CATEGORY">
                 <Dropdown
                   className={styles.dropdown}

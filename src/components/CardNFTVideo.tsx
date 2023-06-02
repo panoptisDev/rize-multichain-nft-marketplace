@@ -11,7 +11,7 @@ import { nanoid } from "@reduxjs/toolkit";
 import VideoForNft from "./VideoForNft";
 import { useAppSelector } from "app/hooks";
 import axios from "axios";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 import CardFlip from "react-card-flip";
 import { NFT_EFFECT } from "./EffectListBox";
 import TileEffect from "./TileEffect/TileEffect";
@@ -73,7 +73,7 @@ const CardNFTVideo = (props: any) => {
             setNftItem(result.data.data);
             checkIsLiked();
           })
-          .catch(() => { });
+          .catch(() => {});
       });
   };
 
@@ -114,8 +114,8 @@ const CardNFTVideo = (props: any) => {
           },
         }
       )
-      .then((result) => { })
-      .catch(() => { });
+      .then((result) => {})
+      .catch(() => {});
   };
 
   const addToPlayList = async () => {
@@ -202,10 +202,11 @@ const CardNFTVideo = (props: any) => {
   const renderListenButtonDefault = (state?: "playing" | "loading") => {
     return (
       <div
-        className={`w-14 h-14 flex items-center justify-center rounded-full  cursor-pointer ${state === "playing"
+        className={`w-14 h-14 flex items-center justify-center rounded-full  cursor-pointer ${
+          state === "playing"
             ? "bg-neutral-900/40 text-primary-50"
             : "bg-neutral-50/80 text-primary-500"
-          }`}
+        }`}
       >
         {renderIcon(state)}
       </div>
@@ -235,8 +236,9 @@ const CardNFTVideo = (props: any) => {
 
   const renderView = () => (
     <div
-      className={`nc-CardNFTMusic z-10 w-full m-auto relative flex flex-col group [ nc-box-has-hover nc-dark-box-bg-has-hover ] ${props?.isHome ? "!border-[#22c55e]" : ""
-        } ${props?.className}`}
+      className={`nc-CardNFTMusic z-10 w-full m-auto relative flex flex-col group [ nc-box-has-hover nc-dark-box-bg-has-hover ] ${
+        props?.isHome ? "!border-[#22c55e]" : ""
+      } ${props?.className}`}
       data-nc-id="CardNFTVideo"
     >
       <div className="relative flex-shrink-0 ">
@@ -264,7 +266,12 @@ const CardNFTVideo = (props: any) => {
                   ? `${config.API_URL}uploads/${nftItem?.logoURL}`
                   : props?.featuredImage
               }
-              className="object-cover w-full max-h-[250px] rounded-3xl overflow-hidden group-hover:scale-[1.03] transition-transform duration-300 ease-in-out cursor-pointer will-change-transform"
+              className={`object-cover w-full max-h-[250px] rounded-3xl overflow-hidden group-hover:scale-[1.03] transition-transform duration-300 ease-in-out cursor-pointer will-change-transform ${
+                (nftItem as any)?.collection_id?.blurItems === true ||
+                (nftItem as any)?.blur === true
+                  ? "blur-2xl"
+                  : ""
+              }`}
             />
           ) : (
             <VideoForPreview
@@ -328,7 +335,7 @@ const CardNFTVideo = (props: any) => {
             >
               {((nftItem as any)?.name || "").toString().length > 10
                 ? ((nftItem as any)?.name || "").toString().substring(0, 10) +
-                "..."
+                  "..."
                 : ((nftItem as any)?.name || "").toString()}
             </div>
           </Tooltip>
@@ -353,8 +360,9 @@ const CardNFTVideo = (props: any) => {
                   <Avatar
                     imgUrl={
                       (nftItem as any)?.owner?.avatar
-                        ? `${config.API_URL}uploads/${(nftItem as any)?.owner.avatar
-                        }`
+                        ? `${config.API_URL}uploads/${
+                            (nftItem as any)?.owner.avatar
+                          }`
                         : defaultAvatar
                     }
                     sizeClass="w-8 h-8 sm:w-8 sm:h-8"
@@ -395,8 +403,8 @@ const CardNFTVideo = (props: any) => {
                     ? "Current Bid"
                     : "Start price"
                   : (nftItem as any)?.isSale == 1
-                    ? "Sale Price"
-                    : "Price"
+                  ? "Sale Price"
+                  : "Price"
               }
               item={nftItem}
             />
@@ -442,8 +450,9 @@ const CardNFTVideo = (props: any) => {
                   <span>Collection:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.collection_id?.logoURL
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.collection_id?.logoURL
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.collection_id?.name}</span>
@@ -453,8 +462,9 @@ const CardNFTVideo = (props: any) => {
                   <span>Owner:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.owner?.avatar
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.owner?.avatar
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.owner?.username}</span>
@@ -464,8 +474,9 @@ const CardNFTVideo = (props: any) => {
                   <span>Creator:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.creator?.avatar
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.creator?.avatar
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.creator?.username}</span>

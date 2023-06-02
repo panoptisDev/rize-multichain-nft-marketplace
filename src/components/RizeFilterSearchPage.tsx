@@ -4,24 +4,26 @@ import { Transition } from "@headlessui/react";
 
 export interface RizeFilterSearchPageProps {
   className?: string;
-  isOpen: boolean,
-  onChangeCategory: any,
-  onChangeDate: any,
-  dateValue: any,
-  onChangeCreator: any,
-  creatorValue: any,
-  onChangeStatus: any,
-  statusValue: any,
-  onChangeRange: any,
-  rangeValue: any,
-  onChangeFileType: any,
-  fileTypeValue: any
+  isOpen: boolean;
+  onChangeCategory: any;
+  categoryValue: any;
+  onChangeDate: any;
+  dateValue: any;
+  onChangeCreator: any;
+  creatorValue: any;
+  onChangeStatus: any;
+  statusValue: any;
+  onChangeRange: any;
+  rangeValue: any;
+  onChangeFileType: any;
+  fileTypeValue: any;
 }
 
 const RizeFilterSearchPage: FC<RizeFilterSearchPageProps> = ({
   className = "mb-12",
   isOpen,
   onChangeCategory,
+  categoryValue,
   onChangeDate,
   dateValue,
   onChangeCreator,
@@ -31,7 +33,7 @@ const RizeFilterSearchPage: FC<RizeFilterSearchPageProps> = ({
   onChangeRange,
   rangeValue,
   onChangeFileType,
-  fileTypeValue
+  fileTypeValue,
 }) => {
   return (
     <div className={`flex flex-col relative ${className}`}>
@@ -46,6 +48,7 @@ const RizeFilterSearchPage: FC<RizeFilterSearchPageProps> = ({
       >
         <RizeFilters
           onChangeCategory={onChangeCategory}
+          categoryValue={categoryValue}
           onChangeDate={onChangeDate}
           dateValue={dateValue}
           onChangeStatus={onChangeStatus}
@@ -58,7 +61,6 @@ const RizeFilterSearchPage: FC<RizeFilterSearchPageProps> = ({
           onChangeFileType={onChangeFileType}
         />
       </Transition>
-
     </div>
   );
 };

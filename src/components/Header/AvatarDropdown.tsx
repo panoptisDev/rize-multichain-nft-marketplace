@@ -77,8 +77,7 @@ export default function AvatarDropdown() {
   useEffect(() => {
     if (localStorage.theme === undefined || localStorage.theme === null) {
       toDark();
-    }
-    else if (
+    } else if (
       localStorage.theme === "dark" ||
       (!("theme" in localStorage) &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
@@ -116,14 +115,17 @@ export default function AvatarDropdown() {
   return (
     <div className="AvatarDropdown">
       <div className="relative dropdown">
-        <div className={`dropbtn p-2 inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}>
-          <IconButton
-            sx={{
-              border: "4px solid #33FF00",
-            }}
-          >
-            <img src={userIcon} />
-          </IconButton>
+        <div
+          className={`dropbtn p-2 inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+        >
+          <img
+            src={
+              !isEmpty(globalUser) && !isEmpty(globalUser?.avatar)
+                ? `${config.API_URL}uploads/${globalUser?.avatar}`
+                : defaultAvatar
+            }
+            className="w-14 h-14  rounded-full border-4 border-[#33ff00]"
+          />
         </div>
         <div className="dropdown-content avatar-dropdown-content z-10 w-screen max-w-[220px] px-4 -right-10 sm:right-0 sm:px-0">
           <div className="overflow-hidden shadow-lg rounded-3xl ring-1 ring-black ring-opacity-5">
@@ -250,14 +252,12 @@ export default function AvatarDropdown() {
                   </svg>
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium ">
-                    {"My Collections"}
-                  </p>
+                  <p className="text-sm font-medium ">{"My Collections"}</p>
                 </div>
               </div>
 
               <div
-                onClick={() => { }}
+                onClick={() => {}}
                 className="flex items-center p-2 -m-3 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
               >
                 <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
@@ -267,8 +267,6 @@ export default function AvatarDropdown() {
                   <p className="text-sm font-medium ">{"Watchlist"}</p>
                 </div>
               </div>
-
-
 
               <div
                 onClick={() => navigate(`/createCollection`)}
@@ -283,7 +281,7 @@ export default function AvatarDropdown() {
               </div>
 
               <div
-                onClick={() => { }}
+                onClick={() => {}}
                 className="flex items-center p-2 -m-3 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
               >
                 <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
@@ -305,7 +303,6 @@ export default function AvatarDropdown() {
                   <p className="text-sm font-medium ">{"Tutorial"}</p>
                 </div>
               </div>
-
 
               <div
                 onClick={_toogleDarkMode}
@@ -354,12 +351,14 @@ export default function AvatarDropdown() {
                   )}
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium ">{isDarkMode ? "Light Mode" : "Dark Mode"}</p>
+                  <p className="text-sm font-medium ">
+                    {isDarkMode ? "Light Mode" : "Dark Mode"}
+                  </p>
                 </div>
               </div>
 
               <div
-                onClick={() => { }}
+                onClick={() => {}}
                 className="flex items-center p-2 -m-3 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
               >
                 <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">

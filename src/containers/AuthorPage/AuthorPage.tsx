@@ -7,7 +7,7 @@ import ButtonPrimary from "shared/Button/ButtonPrimary";
 import SocialsList from "shared/SocialsList/SocialsList";
 import FollowButton from "components/FollowButton";
 import VerifyIcon from "components/VerifyIcon";
-import { MdOutlineVerified } from 'react-icons/md';
+import { MdOutlineVerified } from "react-icons/md";
 
 import { Tab } from "@headlessui/react";
 import CardAuthorBox3 from "components/CardAuthorBox3/CardAuthorBox3";
@@ -112,13 +112,13 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
     if (detailedUserInfo?.telegram)
       socs.push({
         name: "Telegram",
-        icon: <TbBrandTelegram color={'#33FF00'} />,
+        icon: <TbBrandTelegram color={"#33FF00"} />,
         href: detailedUserInfo?.telegram,
       });
     if (detailedUserInfo?.twitter)
       socs.push({
         name: "Twitter",
-        icon: <TbBrandTwitter color={'#33FF00'} />,
+        icon: <TbBrandTwitter color={"#33FF00"} />,
         href: detailedUserInfo?.twitter,
       });
     setUerSocials(socs);
@@ -149,7 +149,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
         dispatch(changeIsExists(result.data.data));
         setIsLiked(result.data.data);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const toggleFollow = async (my_id: string, target_id: string) => {
@@ -214,7 +214,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
         setFollowers(result.data.data || []);
         dispatch(changeFollowList(result.data.data || []));
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const getFollowingList = async (user_id: string, limit: number) => {
@@ -240,7 +240,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
           )
         );
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   const getItemsOfUserByConditions = (
@@ -298,7 +298,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
         tempPlayList = simplePL;
         setDetailedPlayList(tempPlayList);
       })
-      .catch((err) => { });
+      .catch((err) => {});
   };
 
   const getCollections = async (limit, currentUserId) => {
@@ -320,7 +320,7 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
         setCollections(result.data.data);
         dispatch(changeCollectionList(result.data.data));
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -445,19 +445,19 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
               <div className="max-w-screen-sm ">
                 <h2 className="inline-flex items-center text-2xl font-semibold sm:text-3xl lg:text-4xl">
                   <span>{detailedUserInfo?.username || ""}</span>
-                  <MdOutlineVerified
-                    className="ml-2 text-[#33FF00] w-6 h-6 sm:w-7 sm:h-7 xl:w-8 xl:h-8"
-                  />
+                  {Boolean(detailedUserInfo?.verified) === true && (
+                    <MdOutlineVerified className="ml-2 text-[#33FF00] w-6 h-6 sm:w-7 sm:h-7 xl:w-8 xl:h-8" />
+                  )}
                 </h2>
                 {detailedUserInfo?.address?.toLowerCase() ===
                   currentUsr?.address?.toLowerCase() && (
-                    <div className="flex items-center text-sm font-medium space-x-2.5 mt-2.5 text-green-600 cursor-pointer">
-                      <span className="text-neutral-700 dark:text-neutral-300">
-                        {detailedUserInfo?.address || " "}
-                      </span>
-                      <CopyButton data={currentUsr?.address} />
-                    </div>
-                  )}
+                  <div className="flex items-center text-sm font-medium space-x-2.5 mt-2.5 text-green-600 cursor-pointer">
+                    <span className="text-neutral-700 dark:text-neutral-300">
+                      {detailedUserInfo?.address || " "}
+                    </span>
+                    <CopyButton data={currentUsr?.address} />
+                  </div>
+                )}
                 <span className="block max-h-[100px] mt-4 text-sm text-neutral-500 dark:text-neutral-400 overflow-y-auto">
                   {detailedUserInfo?.userBio || ""}
                 </span>
@@ -502,10 +502,11 @@ const AuthorPage: FC<AuthorPageProps> = ({ className = "" }) => {
                   <Tab key={item} as={Fragment}>
                     {({ selected }) => (
                       <button
-                        className={`flex-shrink-0 block font-medium px-4 py-2 text-sm sm:px-6 sm:py-2.5 capitalize rounded-full focus:outline-none ${index === activeIndex
-                          ? "bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900"
-                          : "text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100/70 dark:hover:bg-neutral-800"
-                          } `}
+                        className={`flex-shrink-0 block font-medium px-4 py-2 text-sm sm:px-6 sm:py-2.5 capitalize rounded-full focus:outline-none ${
+                          index === activeIndex
+                            ? "bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900"
+                            : "text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-900 hover:bg-neutral-100/70 dark:hover:bg-neutral-800"
+                        } `}
                         onClick={() => {
                           setActiveIndex(Number(index));
                         }}

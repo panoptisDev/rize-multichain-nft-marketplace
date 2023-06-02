@@ -37,7 +37,7 @@ import {
   changeNetwork,
   getNetworkSymbolByChainId,
   isSupportedNetwork,
-  isSuppportedEVMChain
+  isSuppportedEVMChain,
 } from "InteractWithSmartContract/interact";
 import { toast } from "react-toastify";
 import {
@@ -50,7 +50,7 @@ import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 
 export const infura_Id = "84842078b09946638c03157f83405213";
 
-export interface MainNav2LoggedProps { }
+export interface MainNav2LoggedProps {}
 
 export const web3Modal = new Web3Modal({
   network: "mainnet",
@@ -78,7 +78,6 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   const chainRef = useRef(null);
   const [openState1, setOpenState1] = useState(false);
   const [openState2, setOpenState2] = useState(false);
-  const [provider, setProvider] = useState(null);
 
   let previousNetworkSymbol = currentNetworkSymbol;
 
@@ -135,7 +134,11 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (!signingClient && localStorage.getItem("address") && localStorage.getItem("wallet_type")) {
+        if (
+          !signingClient &&
+          localStorage.getItem("address") &&
+          localStorage.getItem("wallet_type")
+        ) {
           await connectToCoreum(localStorage.getItem("wallet_type"));
         }
       } catch (err) {
@@ -195,8 +198,6 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
       const web3 = new Web3(provider);
 
       const accounts = await web3.eth.getAccounts();
-
-      setProvider(provider);
 
       if (accounts[0]) {
         dispatch(changeWalletAddress(accounts[0]));
@@ -263,7 +264,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
     try {
       const walletconnect = new WalletConnectConnector({
         rpc: RPC_URLs,
-        bridge: 'https://bridge.walletconnect.org',
+        bridge: "https://bridge.walletconnect.org",
         qrcode: true,
         infuraId: infura_Id,
       });
@@ -271,7 +272,12 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
       let connector_update = await walletconnect.activate();
 
       console.log("chain id:::::::::", connector_update.chainId);
-      if (RPC_URLs.keys.filter((item) => { if (item == connector_update.chainId) return true; else return false; }).length == 0) {
+      if (
+        RPC_URLs.keys.filter((item) => {
+          if (item == connector_update.chainId) return true;
+          else return false;
+        }).length == 0
+      ) {
         console.log("mismatch chain id:", connector_update.chainId);
         walletconnect.deactivate();
         localStorage.removeItem("walletconnect");
@@ -283,8 +289,6 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
 
       const account = connector_update.account;
 
-      setProvider(provider);
-
       dispatch(changeWalletAddress(account));
       isCommunityMember(account);
 
@@ -293,7 +297,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
       console.log(error);
       dispatch(changeWalletAddress(""));
     }
-  }
+  };
 
   const handleMetaMask = async () => {
     let switchingResult = await onClickChangeEVMNetwork(currentNetworkSymbol);
@@ -304,7 +308,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
       handleSelectNetwork(previousNetworkSymbol);
     }
     if (switchingResult === true) onClickConnectEVMWallet();
-  }
+  };
 
   const handleSelectNetwork = async (networkSymbol) => {
     previousNetworkSymbol = currentNetworkSymbol;
@@ -384,7 +388,8 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
           <div className="relative dropdown">
             <div className={`dropbtn p-2`}>
               <div className="group py-3 px-6 h-[50px] hover:bg-gray-100 dark:hover:bg-neutral-800 rounded-full inline-flex items-center text-sm font-medium hover:text-opacity-100 relative !outline-none">
-                {isSupportedNetwork(currentNetworkSymbol) === false && "Networks"}
+                {isSupportedNetwork(currentNetworkSymbol) === false &&
+                  "Networks"}
                 {currentNetworkSymbol === PLATFORM_NETWORKS.COREUM && (
                   <div className="flex justify-center items-center">
                     <img
@@ -647,7 +652,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/near.png"
@@ -667,7 +672,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/xrp2.png"
@@ -687,7 +692,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/atom.png"
@@ -707,7 +712,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/solana.png"
@@ -727,7 +732,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/hedera.png"
@@ -747,7 +752,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                         : "hover:bg-neutral-100 dark:hover:bg-neutral-700",
                       "py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg flex gap-2 items-center"
                     )}
-                  // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
+                    // onClick={() =>                       handleSelectNetwork(PLATFORM_NETWORKS.NEAR)                     }
                   >
                     <img
                       src="/images/icons/tezos.png"
@@ -766,14 +771,13 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
           </div>
         </div>
 
-        <div className="relative dropdown">
+        <div className="hidden lg:flex relative dropdown">
           <ButtonPrimary
             onClick={() => {
               if (isSupportedNetwork(currentNetworkSymbol) === true) {
                 if (currentNetworkSymbol === PLATFORM_NETWORKS.COREUM) {
                   // authenticate();
-                }
-                else if (currentNetworkSymbol === PLATFORM_NETWORKS.NEAR) {
+                } else if (currentNetworkSymbol === PLATFORM_NETWORKS.NEAR) {
                   console.log("selected NEAR ");
                 } else {
                   // onClickConnectEVMWallet();
@@ -782,6 +786,7 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                 toast.warn("Please select a network and try again.");
               }
             }}
+            className="dropbtn"
             sizeClass="px-4 py-2 sm:px-5 my-2"
           >
             <IoWalletOutline size={22} />
@@ -791,13 +796,15 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
               <span className="pl-2">Wallet connect</span>
             )}
           </ButtonPrimary>
-          {currentNetworkSymbol === PLATFORM_NETWORKS.COREUM ?
-            <div className="dropdown-content !w-full">
-              <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black ring-opacity-5">
+          {currentNetworkSymbol === PLATFORM_NETWORKS.COREUM ? (
+            <div className="dropdown-content !w-full ">
+              <div className=" mt-12 overflow-hidden rounded-2xl shadow-lg ring-1 ring-black ring-opacity-5 ">
                 <div className="relative grid bg-white dark:bg-neutral-800 px-2 py-2">
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { authenticate("keplr"); }}
+                    onClick={() => {
+                      authenticate("keplr");
+                    }}
                   >
                     <img
                       src="/images/icons/keplr.png"
@@ -812,7 +819,9 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { authenticate("leap"); }}
+                    onClick={() => {
+                      authenticate("leap");
+                    }}
                   >
                     <img
                       src="/images/icons/leap.png"
@@ -827,7 +836,9 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { authenticate("cosmostation"); }}
+                    onClick={() => {
+                      authenticate("cosmostation");
+                    }}
                   >
                     <img
                       src="/images/icons/cosmostation.png"
@@ -842,7 +853,9 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { handleWalletConnect(); }}
+                    onClick={() => {
+                      handleWalletConnect();
+                    }}
                   >
                     <img
                       src="/images/icons/walletconnect.png"
@@ -857,16 +870,22 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                 </div>
               </div>
-            </div> :
+            </div>
+          ) : (
             <></>
-          }
-          {currentNetworkSymbol === PLATFORM_NETWORKS.ETHEREUM || currentNetworkSymbol === PLATFORM_NETWORKS.BSC || currentNetworkSymbol === PLATFORM_NETWORKS.POLYGON || currentNetworkSymbol === PLATFORM_NETWORKS.AVALANCHE ?
-            <div className="dropdown-content !w-full">
-              <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black ring-opacity-5">
+          )}
+          {currentNetworkSymbol === PLATFORM_NETWORKS.ETHEREUM ||
+          currentNetworkSymbol === PLATFORM_NETWORKS.BSC ||
+          currentNetworkSymbol === PLATFORM_NETWORKS.POLYGON ||
+          currentNetworkSymbol === PLATFORM_NETWORKS.AVALANCHE ? (
+            <div className="dropdown-content !w-full ">
+              <div className=" mt-12 overflow-hidden rounded-2xl shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative grid bg-white dark:bg-neutral-800 px-2 py-2">
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { handleMetaMask(); }}
+                    onClick={() => {
+                      handleMetaMask();
+                    }}
                   >
                     <img
                       src="/images/icons/metamask.png"
@@ -881,7 +900,9 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                   <div
                     className="py-2 px-2 transition cursor-pointer duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex gap-2 items-center"
-                    onClick={() => { handleWalletConnect(); }}
+                    onClick={() => {
+                      handleWalletConnect();
+                    }}
                   >
                     <img
                       src="/images/icons/walletconnect.png"
@@ -896,84 +917,16 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
                   </div>
                 </div>
               </div>
-            </div> :
+            </div>
+          ) : (
             <></>
-          }
+          )}
         </div>
         {!isEmpty(walletAddress) && <AvatarDropdown />}
         <ShoppingCart />
         <div className="flex items-center space-x-3 lg:hidden">
           <MenuBar />
         </div>
-
-        {/* <div className="flex-shrink-0 flex items-center justify-end text-neutral-700 dark:text-neutral-100 space-x-1">
-          <div className="hidden items-center xl:flex space-x-2">
-            <div>
-              <ul className="hidden sm:flex sm:space-x-2 relative w-full overflow-x-auto text-md md:text-sm hiddenScrollba cursor-pointer">
-                <li
-                  className={
-                    tabActive === 0
-                      ? "text-primary-1000 px-2 sm:px-5  py-2"
-                      : "text-primary-1000 px-2 sm:px-5 py-2 hover:text-green-300"
-                  }
-                  onClick={() => {
-                    setTabActive(0);
-                    navigate("/");
-                  }}
-                >
-                  <span>Home</span>
-                </li>
-                <li
-                  className={
-                    tabActive === 1
-                      ? "text-primary-1000 px-2 sm:px-5 py-2"
-                      : "text-primary-1000 px-2 sm:px-5 py-2 hover:text-green-300"
-                  }
-                  onClick={() => {
-                    setTabActive(1);
-                    navigate("/page-search");
-                  }}
-                >
-                  <span>Marketplace</span>
-                </li>
-              </ul>
-            </div>
-            {isEmpty(walletAddress) == false && walletStatus == true ? (
-              <ButtonPrimary
-                onClick={() => {
-                  navigate("/createCollection");
-                }}
-                sizeClass="px-4 py-2 sm:px-5"
-              >
-                Create collection
-              </ButtonPrimary>
-            ) : (
-              <ButtonPrimary
-                onClick={() => {
-                  authenticate();
-                }}
-                sizeClass="px-4 py-2 sm:px-5"
-              >
-                <IoWalletOutline size={22} />
-                <span className="pl-2">Wallet connect</span>
-              </ButtonPrimary>
-            )}
-            <div className="hidden sm:block h-6 border-l border-neutral-300 dark:border-neutral-6000"></div>
-            <div className="flex">
-              <Settings />
-              <NotifyDropdown />
-              {!isEmpty(user) && <Message />}
-            </div>
-            <div></div>
-            <AvatarDropdown />
-          </div>
-          <div className="flex items-center space-x-3 xl:hidden">
-            <NotifyDropdown />
-            {!isEmpty(user) && <Message />}
-            <AvatarDropdown />
-            <MenuBar />
-          </div>
-        </div> */}
       </div>
     </div>
   );

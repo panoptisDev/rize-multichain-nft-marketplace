@@ -26,7 +26,7 @@ const VideoForPreview: FC<VideoForNftProps> = ({
         title="Play"
         dangerouslySetInnerHTML={{
           __html: containStrict ?
-            `<video class="w-full h-full " playsinline autoplay loop muted style="contain:strict">
+            `<video class="w-full h-full " playsinline autoplay loop muted style="contain:strict;border-radius:25px">
                     <source src=${src} type="video/mp4" />
                     our browser does not support the video tag.
                   </video>`:

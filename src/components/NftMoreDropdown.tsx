@@ -504,11 +504,11 @@ const NftMoreDropdown: FC<NftMoreDropdownProps> = ({
       try {
         let checkBalance = await checkNativeCurrencyAndTokenBalances(0);
         if (checkBalance == false) return;
-        let txHash = transferNFT(
+        let txHash = await transferNFT(
           currentUsr.address,
           globalDetailNFT.collection_id.cw721address,
           toAddr,
-          globalDetailNFT.tokenId
+          globalDetailNFT.tokenId.toString()
         );
         if (txHash == -1) {
           toast.error("Network error.");

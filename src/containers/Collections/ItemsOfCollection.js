@@ -53,9 +53,7 @@ const ItemsOfCollection = () => {
   const [all, setAll] = useState(true);
   const [refresh, setRefresh] = useState(false);
   const { collectionId } = useParams();
-  const [collectionMinPrice, setCollectionMinPrice] = useState(
-    collection.price
-  );
+  const [collectionMinPrice, setCollectionMinPrice] = useState(0);
 
   const settings = {
     infinite: true,
@@ -124,7 +122,7 @@ const ItemsOfCollection = () => {
         setMetaList(list);
         dispatch(changeDetailedCollection(data));
       })
-      .catch(() => { });
+      .catch(() => {});
   }, [collectionId]);
 
   useEffect(() => {
@@ -155,8 +153,8 @@ const ItemsOfCollection = () => {
             setViewNoMore(false);
           }, 2500);
         }
-
         setItems(result.data.data);
+        calcFloorPrice(result.data.data);
 
         // if (start === 0) {
         //   setItems(result.data.data);
@@ -171,29 +169,34 @@ const ItemsOfCollection = () => {
         // setStart(last);
         // setLast(last + 8);
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
-  useEffect(() => {
+  const calcFloorPrice = (items) => {
     let isCollectionOnSale = false;
     for (let idx = 0; idx < items.length; idx++) {
       if (items[idx].isSale > 0) {
         isCollectionOnSale = true;
-        return;
+        break;
       }
     }
-    if (isCollectionOnSale === true) {
-      let minPrice = collection.price;
 
-      if (items[0]?.isSale == 2) {
-        if (items[0].bids && items[0].bids.length > 0) {
-          minPrice = items[0].bids[items[0].bids.length - 1].price;
+    if (isCollectionOnSale == true) {
+      let minPrice = 0;
+      for (let i = 1; i < items.length; i++) {
+        if (items[i].isSale == 0) continue;
+        if (items[i]?.isSale == 2) {
+          if (items[i].bids && items[i].bids.length > 0) {
+            minPrice = items[i].bids[items[i].bids.length - 1].price;
+          }
+        } else {
+          minPrice = items[i]?.price;
         }
-      } else {
-        minPrice = items[0]?.price;
+        break;
       }
 
-      for (let i = 1; i < items.length; i++) {
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].isSale == 0) continue;
         if (items[i].isSale == 2) {
           if (items[i].bids && items[i].bids.length > 0) {
             if (minPrice > items[i].bids[items[i].bids.length - 1].price)
@@ -207,7 +210,7 @@ const ItemsOfCollection = () => {
     } else {
       setCollectionMinPrice(0);
     }
-  }, [items]);
+  };
 
   const handleChangeFilter = (value, index) => {
     if (metaList.length > index) {
@@ -317,9 +320,7 @@ const ItemsOfCollection = () => {
           {collection && collection.name}
         </div>
         {collection?.address && collection.address !== "" && (
-          <div
-            style={{ marginTop: "1rem", textAlign: "center" }}
-          >
+          <div style={{ marginTop: "1rem", textAlign: "center" }}>
             <span className="w-full text-base text-neutral-900 dark:text-neutral-100">
               {getMidAddress(collection.address)}
             </span>

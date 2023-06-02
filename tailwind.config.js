@@ -32,7 +32,7 @@ module.exports = {
 
     extend: {
       aspectRatio: {
-        '4/3': '4 / 3',
+        "4/3": "4 / 3",
       },
       colors: {
         primary: {
@@ -48,7 +48,7 @@ module.exports = {
           900: customColors("--c-primary-900"),
           1000: "#33FF00",
           1010: "#3CCF18",
-          1020: "#C4DFBD"
+          1020: "#C4DFBD",
         },
         secondary: {
           50: customColors("--c-secondary-50"),
@@ -75,15 +75,21 @@ module.exports = {
           900: customColors("--c-neutral-900"),
         },
       },
+      backdropFilter: {
+        blur: "blur(20px)",
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backdropFilter: ["responsive"],
+    },
   },
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
     require("@tailwindcss/line-clamp"),
     require("@tailwindcss/aspect-ratio"),
+    require("@tailwindcss/postcss7-compat"),
   ],
 };

@@ -84,6 +84,7 @@ const CreateCollection = () => {
   const currentUsr = useAppSelector(selectCurrentUser);
   const currentNetworkSymbol = useAppSelector(selectCurrentNetworkSymbol);
   const isUserAMemberOfCommunity = useAppSelector(selectIsCommunityMember);
+  const [blurItems, setBlurItems] = useState(false);
 
   useEffect(() => {
     if (localStorage.theme === undefined || localStorage.theme === null) {
@@ -352,6 +353,7 @@ const CreateCollection = () => {
         params.networkSymbol = currentNetworkSymbol;
         params.creatorWallet = currentUsr.address;
         params.wantTobeMemberColl = isRizeMemberCollection;
+        params.blurItems = blurItems;
         saveCollection(params);
       })
       .catch(function (error) {
@@ -624,7 +626,7 @@ const CreateCollection = () => {
         <div className={styles.item}>
           <div className={styles1.stage}>Collection Details</div>
           <div className=" flex min-h-[250px] ">
-            <div className="flex flex-col min-h-full justify-between w-2/5">
+            <div className="flex flex-col min-h-full justify-evenly w-2/5">
               <FormItem label="Name *">
                 <Input
                   defaultValue="name"
@@ -635,18 +637,15 @@ const CreateCollection = () => {
                   }}
                 />
               </FormItem>
-              <FormItem label="Sell PRICE">
-                <Input
-                  placeholder="Enter the floor price"
-                  value={floorPrice}
-                  type="number"
-                  min="0"
-                  step="0.001"
-                  onChange={(event) => {
-                    setFloorPrice(event.target.value);
+              <div className="flexl mt-5 ml-0 mb-5">
+                <Checkbox
+                  value={blurItems}
+                  onChange={(e, checked) => {
+                    setBlurItems(checked);
                   }}
                 />
-              </FormItem>
+                <Label>Blur items</Label>
+              </div>
               <FormItem label="CATEGORY">
                 <Dropdown
                   className={styles.dropdown}
@@ -660,8 +659,8 @@ const CreateCollection = () => {
               <Label>Description</Label>
               <Editor
                 editorState={editorState}
-                wrapperClassName="demo-wrapper mt-1.5 "
-                editorClassName="demo-editor border-2 rounded-lg border-neutral-100 dark:border-neutral-400  min-h-[200px]"
+                wrapperClassName="demo-wrapper mt-1.5 text-black "
+                editorClassName="demo-editor border-2 rounded-lg border-neutral-100 dark:border-neutral-400  min-h-[200px] text-black dark:text-white "
                 onEditorStateChange={onEditorStateChange}
               />
             </div>

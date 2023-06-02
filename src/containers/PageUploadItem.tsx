@@ -153,15 +153,15 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
   useEffect(() => {
     //check the current user, if ther user is not exists or not verified, go back to the home
     if (
-      isEmpty(currentUsr) ||
-      (!isEmpty(detailedUserInfo) &&
-        !isEmpty(detailedUserInfo?.verified) &&
-        !detailedUserInfo?.verified)
+      !isEmpty(detailedUserInfo) &&
+      Boolean(detailedUserInfo?.verified) === false
     ) {
-      toast.warn("Please connect your wallet first.");
+      toast.warn(
+        "Please connect your wallet first. And check that you've verified."
+      );
       navigate("/");
     }
-  }, []);
+  }, [detailedUserInfo]);
 
   useEffect(() => {
     if (collections && collections.length > 0) {
@@ -1121,8 +1121,8 @@ const PageUploadItem: FC<PageUploadItemProps> = ({ className = "" }) => {
               >
                 <Editor
                   editorState={editorState}
-                  wrapperClassName="demo-wrapper mt-1.5 "
-                  editorClassName="demo-editor min-h-[300px] border-2 rounded-lg border-neutral-100 dark:border-neutral-400 "
+                  wrapperClassName="demo-wrapper mt-1.5 text-black "
+                  editorClassName="demo-editor border-2 rounded-lg border-neutral-100 dark:border-neutral-400  min-h-[300px] text-black dark:text-white "
                   onEditorStateChange={onEditorStateChange}
                 />
               </FormItem>

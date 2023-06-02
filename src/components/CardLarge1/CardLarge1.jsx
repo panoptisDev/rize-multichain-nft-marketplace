@@ -570,6 +570,7 @@ const CardLarge1 = ({
               }
               nftId={consideringItem?._id || ""}
               className="aspect-w-1 aspect-h-1 relative  inset-0 object-cover rounded-3xl sm:rounded-[40px] border-4 sm:border-[14px] border-white dark:border-neutral-800"
+              containStrict={true}
             />
 }
           </div>

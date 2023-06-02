@@ -15,7 +15,7 @@ import {
   selectCurrentNetworkSymbol,
   selectCurrentUser,
 } from "app/reducers/auth.reducers";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 import CardFlip from "react-card-flip";
 import { useAppSelector } from "app/hooks";
 import { isEmpty } from "app/methods";
@@ -96,7 +96,7 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
             setNftItem(result.data.data);
             checkIsLiked(result.data.data);
           })
-          .catch(() => { });
+          .catch(() => {});
       });
   };
 
@@ -203,8 +203,9 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
   const renderView = () => {
     return (
       <div
-        className={`nc-CardNFT z-10 m-auto relative flex flex-col group [ nc-box-has-hover nc-dark-box-bg-has-hover ] ${props?.isHome ? "!border-[#22c55e]" : ""
-          } ${className}`}
+        className={`nc-CardNFT z-10 m-auto relative flex flex-col group [ nc-box-has-hover nc-dark-box-bg-has-hover ] ${
+          props?.isHome ? "!border-[#22c55e]" : ""
+        } ${className}`}
         data-nc-id="CardNFT"
       >
         <div className="relative flex-shrink-0 ">
@@ -217,7 +218,12 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                   ? navigate(`/nft-detail/${(nftItem as any)?._id}`)
                   : navigate("/nft-detail");
               }}
-              className="object-cover cursor-pointer w-full max-h-[250px] rounded-3xl overflow-hidden  group-hover:scale-[1.03] transition-transform duration-300 ease-in-out will-change-transform"
+              className={`object-cover cursor-pointer w-full max-h-[250px] rounded-3xl overflow-hidden  group-hover:scale-[1.03] transition-transform duration-300 ease-in-out will-change-transform ${
+                (nftItem as any)?.collection_id?.blurItems === true ||
+                (nftItem as any)?.blur === true
+                  ? "blur-2xl"
+                  : ""
+              } `}
             />
           </div>
           <ItemTypeImageIcon className="absolute top-3 left-3 !w-9 !h-9" />
@@ -259,7 +265,7 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
               >
                 {((nftItem as any)?.name || "").toString().length > 10
                   ? ((nftItem as any)?.name || "").toString().substring(0, 10) +
-                  "..."
+                    "..."
                   : ((nftItem as any)?.name || "").toString()}
               </div>
             </Tooltip>
@@ -284,8 +290,9 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                     <Avatar
                       imgUrl={
                         (nftItem as any)?.owner?.avatar
-                          ? `${config.API_URL}uploads/${(nftItem as any)?.owner.avatar
-                          }`
+                          ? `${config.API_URL}uploads/${
+                              (nftItem as any)?.owner.avatar
+                            }`
                           : defaultAvatar
                       }
                       sizeClass="w-8 h-8 sm:w-8 sm:h-8"
@@ -324,8 +331,8 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                       ? "Current Bid"
                       : "Start price"
                     : (nftItem as any)?.isSale == 1
-                      ? "Sale Price"
-                      : "Price"
+                    ? "Sale Price"
+                    : "Price"
                 }
                 item={nftItem}
               />
@@ -381,8 +388,9 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                   <span>Collection:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.collection_id?.logoURL
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.collection_id?.logoURL
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.collection_id?.name}</span>
@@ -392,8 +400,9 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                   <span>Owner:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.owner?.avatar
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.owner?.avatar
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.owner?.username}</span>
@@ -403,8 +412,9 @@ const CardNFT: FC<CardNFTProps> = (props: any) => {
                   <span>Creator:</span>
                   <div className="flex flex-row gap-4 items-center">
                     <Avatar
-                      imgUrl={`${config.API_URL}uploads/${(nftItem as any)?.creator?.avatar
-                        }`}
+                      imgUrl={`${config.API_URL}uploads/${
+                        (nftItem as any)?.creator?.avatar
+                      }`}
                       sizeClass="w-8 h-8 sm:w-9 sm:h-9"
                     />
                     <span>{(nftItem as any)?.creator?.username}</span>

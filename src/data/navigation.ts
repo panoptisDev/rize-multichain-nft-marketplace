@@ -110,13 +110,36 @@ export const NAVIGATION_DEMO_2: NavItemType[] = [
   {
     id: ncNanoId(),
     href: "/",
-    name: "Home",
-    // type: "dropdown",
-    // children: otherPageChildMenus,
+    name: "Marketplace",
   },
   {
     id: ncNanoId(),
-    href: "/page-search",
-    name: "Marketplace",
+    href: "/",
+    name: "Launchpad",
+  },
+  {
+    id: ncNanoId(),
+    href: "/",
+    name: "Lock",
+  },
+  {
+    id: ncNanoId(),
+    href: "/",
+    name: "Bridge",
+  },
+  {
+    id: ncNanoId(),
+    href: "/",
+    name: "Vote",
+  },
+  {
+    id: ncNanoId(),
+    href: "/",
+    name: "LLE",
+  },
+  {
+    id: ncNanoId(),
+    href: "/",
+    name: "Core DEX",
   },
 ];

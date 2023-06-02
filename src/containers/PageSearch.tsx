@@ -1,5 +1,5 @@
-import React, { FC, useRef, useState, useEffect } from "react";
-import clsx from 'clsx';
+import React, { FC, useRef, useState, useEffect, useCallback } from "react";
+import clsx from "clsx";
 import { Helmet } from "react-helmet";
 import RizeFilterSearchPage from "components/RizeFilterSearchPage";
 import CardNFT from "components/CardNFT";
@@ -10,7 +10,7 @@ import { useSigningClient } from "app/cosmwasm";
 import CardNFTMusic from "components/CardNFTMusic";
 import CardNFTVideo from "components/CardNFTVideo";
 import CardNFT3D from "components/CardNFT3D";
-import frameImg from 'images/vector.svg';
+import frameImg from "images/vector.svg";
 
 const navLinks = [{ value: 0, text: "All items" }, ...CATEGORIES];
 const dateOptions = [
@@ -37,7 +37,7 @@ const statusOptions = [
   { value: 0, text: "All" },
   { value: 1, text: "On Sale" },
   { value: 2, text: "On Auction" },
-  { value: 3, text: "Listed" }
+  { value: 3, text: "Listed" },
 ];
 
 export interface PageSearchProps {
@@ -53,12 +53,12 @@ const settings = {
     stretch: 40, // Stretch space between slides (in px)
     depth: 300, // Depth offset in px (slides translate in Z axis)
     modifier: 1, // Effect multipler
-    slideShadows: false // Enables slides shadows
-  }
-}
+    slideShadows: false, // Enables slides shadows
+  },
+};
 
 const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [category, setCategory] = useState(0);
 
   const [date, setDate] = useState(0);
   const [likes, setLikes] = useState(0);
@@ -82,10 +82,23 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("currentItemCount", "0");
+    var param = {
+      date: dateOptions[date].value,
+      category: navLinks[category].value,
+      status: statusOptions[status].value,
+    };
+    (param as any).price = priceOptions[price].value;
+    (param as any).likes = likesOptions[likes].value;
+    (param as any).creator = creatorOptions[creator].value;
+    (param as any).range = [range[0], range[1]];
+    (param as any).sortmode = dateOptions[date].value;
+    (param as any).fileType = fileType;
+    localStorage.setItem("searchFilter", JSON.stringify(param));
     getCollectionList(true);
   }, [
     date,
-    activeIndex,
+    category,
     price,
     fileType,
     likes,
@@ -111,39 +124,33 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
             setMetaDatas([]);
           }
         })
-        .catch(() => { });
+        .catch(() => {});
     } else {
       setMetaDatas([]);
     }
   }, [selectedCollection]);
 
   const getCollectionList = (reStart: boolean) => {
+    let filterParams = JSON.parse(localStorage.getItem("searchFilter"));
     let currentItemCount = localStorage.getItem("currentItemCount");
     if (currentItemCount == null || currentItemCount == undefined) {
       localStorage.setItem("currentItemCount", "0");
     }
 
     var param = {
-      start: reStart == true ? 0 : currentItemCount,
+      start: reStart == true ? 0 : Number(currentItemCount),
       last: reStart == true ? 10 : Number(currentItemCount) + Number(10),
-      date: dateOptions[date].value,
-      category: navLinks[activeIndex].value,
-      status: statusOptions[status].value,
+      date: filterParams.date,
+      category: filterParams.category,
+      status: filterParams.status,
     };
-    // if (visible) {
-    (param as any).price = priceOptions[price].value;
-    (param as any).likes = likesOptions[likes].value;
-    (param as any).creator = creatorOptions[creator].value;
-    // (param as any).range = range;
+    (param as any).price = filterParams.price;
+    (param as any).likes = filterParams.likes;
+    (param as any).creator = filterParams.creator;
 
-    (param as any).range = [range[0], range[1]];
-    (param as any).sortmode = dateOptions[date].value;
-    (param as any).fileType = fileType;
-    // }
-    // if (selectedCollection) {
-    //   (param as any).collection_id = (selectedCollection as any)._id;
-    //   (param as any).metadata = checked;
-    // }
+    (param as any).range = filterParams.range;
+    (param as any).sortmode = filterParams.sortmode;
+    (param as any).fileType = filterParams.fileType;
 
     localStorage.setItem("loading", "true");
     setTimeout(() => {
@@ -157,6 +164,7 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
         for (var i = 0; i < result.data.list.length; i++) {
           var item = result.data.list[i].item_info;
           item.owner = result.data.list[i].owner_info;
+          item.blur = result.data.list[i].blurItems;
           item.users = [{ avatar: result.data.list[i].creator_info.avatar }];
           list.push(item);
         }
@@ -197,6 +205,20 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
   };
 
   const onResetFilter = () => {
+    localStorage.setItem("currentItemCount", "0");
+    let initFilter = {
+      category: 0,
+      creator: 0,
+      date: 0,
+      fileType: 0,
+      likes: 0,
+      price: 0,
+      range: [0, 100000],
+      sortmode: 0,
+      status: 0,
+    };
+    localStorage.setItem("searchFilter", JSON.stringify(initFilter));
+    setCategory(0);
     setDate(0);
     setLikes(0);
     setCreator(0);
@@ -209,7 +231,6 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
     setPriceMin("");
     setFileType(0);
     localStorage.setItem("loading", "false");
-    localStorage.setItem("currentItemCount", "0");
   };
 
   const handlePrice = (type, event) => {
@@ -245,14 +266,29 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
 
   const renderEffect = () => {
     const rows = [];
-    for (let i = 150, j = 0; i < pageRef?.current?.clientHeight; i += 500, j++) {
-      rows.push(<div className={clsx("absolute z-auto bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full", j % 2 === 0 ? '-left-[100px]' : '-right-[100px]')} style={{ top: i + 'px' }}></div>)
+    for (
+      let i = 150, j = 0;
+      i < pageRef?.current?.clientHeight;
+      i += 500, j++
+    ) {
+      rows.push(
+        <div
+          className={clsx(
+            "absolute z-auto bg-[#33FF00] opacity-30 blur-[100px] w-[300px] h-[300px] rounded-full",
+            j % 2 === 0 ? "-left-[100px]" : "-right-[100px]"
+          )}
+          style={{ top: i + "px" }}
+        ></div>
+      );
     }
-    return <div className="absolute top-0 right-0 w-full">{rows}</div>
-  }
+    return <div className="absolute top-0 right-0 w-full">{rows}</div>;
+  };
 
   return (
-    <div className={`nc-PageSearch relative min-h-[calc(100vh-346px)] ${className}`} data-nc-id="PageSearch">
+    <div
+      className={`nc-PageSearch relative min-h-[calc(100vh-346px)] ${className}`}
+      data-nc-id="PageSearch"
+    >
       <Helmet>
         <title>Marketplace || Rize2Day </title>
       </Helmet>
@@ -266,7 +302,8 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
           <RizeFilterSearchPage
             className="mb-2"
             isOpen={isOpenFilter}
-            onChangeCategory={setActiveIndex}
+            onChangeCategory={setCategory}
+            categoryValue={category}
             onChangeDate={setDate}
             dateValue={date}
             onChangeCreator={setCreator}
@@ -281,42 +318,34 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
         </header>
       </div>
 
-      <div className="relative h-full px-10 py-6 lg:pb-28 lg:pt-10 space-y-16 lg:space-y-28 overflow-hidden" style={{ minHeight: 'inherit' }}>
+      <div
+        className="relative h-full px-10 py-6 lg:pb-28 lg:pt-10 space-y-16 lg:space-y-28 overflow-hidden"
+        style={{ minHeight: "inherit" }}
+      >
         <main ref={pageRef} className="h-full">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-8 gap-y-10 mt-8 lg:mt-10">
             {collections &&
               collections.length > 0 &&
               collections.map((x, index) =>
-                x.fileType > 0 ? (
-                  x.fileType === FILE_TYPE.IMAGE ? (
-                    <CardNFT className={"w-[300px]"} item={x} key={index} />
-                  ) : x.fileType === FILE_TYPE.AUDIO ? (
-                    <CardNFTMusic
-                      className={"w-[300px]"}
-                      item={x}
-                      key={index}
-                    />
-                  ) : x.fileType === FILE_TYPE.VIDEO ? (
-                    <CardNFTVideo
-                      className={"w-[300px]"}
-                      item={x}
-                      key={index}
-                    />
-                  ) : (
-                    <CardNFT3D
-                      className={"w-[300px]"}
-                      item={x}
-                      key={index}
-                    />
-                  )
+                x.fileType === FILE_TYPE.IMAGE ? (
+                  <CardNFT className={"w-[300px]"} item={x} key={index} />
+                ) : x.fileType === FILE_TYPE.AUDIO ? (
+                  <CardNFTMusic className={"w-[300px]"} item={x} key={index} />
+                ) : x.fileType === FILE_TYPE.VIDEO ? (
+                  <CardNFTVideo className={"w-[300px]"} item={x} key={index} />
                 ) : (
-                  <></>
+                  <CardNFT3D className={"w-[300px]"} item={x} key={index} />
                 )
               )}
           </div>
 
           <div className=" text-center mt-10 m-10">
-            <span>&nbsp;{(viewNoMore === true || collections?.length === 0) && "No more items"}&nbsp;</span>
+            <span>
+              &nbsp;
+              {(viewNoMore === true || collections?.length === 0) &&
+                "No more items"}
+              &nbsp;
+            </span>
           </div>
           {/* 
           <div className="flex flex-col mt-12 lg:mt-16 space-y-5 sm:space-y-0 sm:space-x-3 sm:flex-row sm:justify-between sm:items-center">
@@ -325,7 +354,11 @@ const PageSearch: FC<PageSearchProps> = ({ className = "" }) => {
             >Show me more</ButtonPrimary>
           </div> */}
           {renderEffect()}
-          <img className="absolute w-full right-0 bottom-1/4 opacity-5" src={frameImg} alt="" />
+          <img
+            className="absolute w-full right-0 bottom-1/4 opacity-5"
+            src={frameImg}
+            alt=""
+          />
         </main>
       </div>
     </div>
